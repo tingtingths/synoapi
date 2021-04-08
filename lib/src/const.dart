@@ -1,50 +1,50 @@
 const String UNKNOWN = "Unknown";
 
 class Syno {
-  static final _name = 'SYNO';
+  static final name = 'SYNO';
 
-  static _Api get API => _Api(_name);
+  static _Api get API => _Api(name);
 
-  static _Ds get DownloadStation => _Ds(_name);
+  static _Ds get DownloadStation => _Ds(name);
 }
 
 class _Api {
-  final _name = 'API';
+  final name = 'API';
   String _base;
 
   _Api(this._base);
 
-  String get Info => [_base, _name, 'Info'].join('.');
+  String get Info => [_base, name, 'Info'].join('.');
 
-  String get Auth => [_base, _name, 'Auth'].join('.');
+  String get Auth => [_base, name, 'Auth'].join('.');
 }
 
 class _Ds {
-  final _name = 'DownloadStation';
+  final name = 'DownloadStation';
   String _base;
 
   _Ds(this._base);
 
-  String get Info => [_base, _name, 'Info'].join('.');
+  String get Info => [_base, name, 'Info'].join('.');
 
-  String get Schedule => [_base, _name, 'Schedule'].join('.');
+  String get Schedule => [_base, name, 'Schedule'].join('.');
 
-  String get Task => [_base, _name, 'Task'].join('.');
+  String get Task => [_base, name, 'Task'].join('.');
 
-  String get Statistic => [_base, _name, 'Statistic'].join('.');
+  String get Statistic => [_base, name, 'Statistic'].join('.');
 
-  String get BTSearch => [_base, _name, 'BTSearch'].join('.');
+  String get BTSearch => [_base, name, 'BTSearch'].join('.');
 
-  _Rss get RSS => _Rss([_base, _name].join('.'));
+  _Rss get RSS => _Rss([_base, name].join('.'));
 }
 
 class _Rss {
-  final _name = 'RSS';
+  final name = 'RSS';
   String _base;
 
   _Rss(this._base);
 
-  String get Site => [_base, _name, 'Site'].join('.');
+  String get Site => [_base, name, 'Site'].join('.');
 
-  String get Feed => [_base, _name, 'Feed'].join('.');
+  String get Feed => [_base, name, 'Feed'].join('.');
 }
