@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 
 import 'auth.dart';
-import 'modeled/model.dart';
-import 'modeled/query_mapped.dart';
+import 'model.dart';
+import 'api/query.dart';
 
 class LoggingInterceptor extends InterceptorsWrapper {
   @override
@@ -58,7 +58,7 @@ class APIContext {
     if (respObj['success']) {
       _appSid[app] = respObj['data']['sid'];
 
-      APIResponse<Map<String, APIInfoQuery>> apiInfo = await QueryAPI(this).apiInfo();
+      var apiInfo = await QueryAPI(this).info().apiInfo();
       if (!apiInfo.success) {
         throw Exception(
             'Failed to query api info. error: ' + apiInfo.error.entries.map((e) => '${e.key}=${e.value}').join(','));
