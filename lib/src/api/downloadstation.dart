@@ -11,42 +11,39 @@ import '../model.dart' as model;
 class DownloadStationAPI {
   final session = 'DownloadStation';
   final endpoint = '/webapi/DownloadStation';
-  APIContext _cntx;
+  final APIContext _cntx;
 
   // sub APIs
-  Info _info;
-  Schedule _schedule;
-  Task _task;
+  late final Info _info;
+  late final Schedule _schedule;
+  late final Task _task;
 
-  DownloadStationAPI(APIContext cntx) {
-    _cntx = cntx;
+  DownloadStationAPI(this._cntx) {
     _info = Info(this);
     _schedule = Schedule(this);
     _task = Task(this);
   }
 
-  Info info() {
+  Info get info {
     return _info;
   }
 
-  Schedule schedule() {
+  Schedule get schedule {
     return _schedule;
   }
 
-  Task task() {
+  Task get task {
     return _task;
   }
 }
 
 class Info {
   final endpoint = '/info.cgi';
-  DownloadStationAPI _parentApi;
+  final DownloadStationAPI _parentApi;
 
-  Info(DownloadStationAPI dsApi) {
-    _parentApi = dsApi;
-  }
+  Info(this._parentApi);
 
-  Future<Response<String>> getInfoRaw({int version}) async {
+  Future<Response<String>> getInfoRaw({int? version}) async {
     final param = {
       'api': Syno.DownloadStation.Info,
       'version':
@@ -59,14 +56,14 @@ class Info {
     return _parentApi._cntx.c.getUri(uri);
   }
 
-  Future<model.APIResponse<model.DownloadStationInfoGetInfo>> getInfo({int version}) async {
+  Future<model.APIResponse<model.DownloadStationInfoGetInfo>> getInfo({int? version}) async {
     return getInfoRaw(version: version).then((resp) {
       return model.APIResponse.fromJson(
           jsonDecode(resp.data), (json) => model.DownloadStationInfoGetInfo.fromJson(json));
     });
   }
 
-  Future<Response<String>> getConfigRaw({int version}) async {
+  Future<Response<String>> getConfigRaw({int? version}) async {
     final param = {
       'api': Syno.DownloadStation.Info,
       'version':
@@ -79,14 +76,14 @@ class Info {
     return _parentApi._cntx.c.getUri(uri);
   }
 
-  Future<model.APIResponse<model.DownloadStationInfoGetConfig>> getConfig({int version}) async {
+  Future<model.APIResponse<model.DownloadStationInfoGetConfig>> getConfig({int? version}) async {
     return getConfigRaw(version: version).then((resp) {
       return model.APIResponse.fromJson(
           jsonDecode(resp.data), (json) => model.DownloadStationInfoGetConfig.fromJson(json));
     });
   }
 
-  Future<Response<String>> setServerConfigRaw(Map<String, String> config, {int version}) async {
+  Future<Response<String>> setServerConfigRaw(Map<String, String> config, {int? version}) async {
     final param = {
       'api': Syno.DownloadStation.Info,
       'version':
@@ -101,7 +98,7 @@ class Info {
     return _parentApi._cntx.c.getUri(uri);
   }
 
-  Future<model.APIResponse<void>> setServerConfig(Map<String, String> config, {int version}) async {
+  Future<model.APIResponse<void>> setServerConfig(Map<String, String> config, {int? version}) async {
     return setServerConfigRaw(config, version: version).then((resp) {
       return model.APIResponse.fromJson(jsonDecode(resp.data), (json) {});
     });
@@ -110,13 +107,11 @@ class Info {
 
 class Schedule {
   final endpoint = '/schedule.cgi';
-  DownloadStationAPI _parentApi;
+  final DownloadStationAPI _parentApi;
 
-  Schedule(DownloadStationAPI dsApi) {
-    _parentApi = dsApi;
-  }
+  Schedule(this._parentApi);
 
-  Future<Response<String>> getConfigRaw({int version}) async {
+  Future<Response<String>> getConfigRaw({int? version}) async {
     final param = {
       'api': Syno.DownloadStation.Schedule,
       'version': version == null
@@ -130,14 +125,14 @@ class Schedule {
     return _parentApi._cntx.c.getUri(uri);
   }
 
-  Future<model.APIResponse<model.DownloadStationScheduleGetConfig>> scheduleGetConfig({int version}) async {
+  Future<model.APIResponse<model.DownloadStationScheduleGetConfig>> scheduleGetConfig({int? version}) async {
     return getConfigRaw(version: version).then((resp) {
       return model.APIResponse.fromJson(
           jsonDecode(resp.data), (json) => model.DownloadStationScheduleGetConfig.fromJson(json));
     });
   }
 
-  Future<Response<String>> setConfigRaw(bool enabled, bool emuleEnabled, {int version}) async {
+  Future<Response<String>> setConfigRaw(bool enabled, bool emuleEnabled, {int? version}) async {
     final param = {
       'enabled': enabled.toString(),
       'emule_enabled': emuleEnabled.toString(),
@@ -153,7 +148,7 @@ class Schedule {
     return _parentApi._cntx.c.getUri(uri);
   }
 
-  Future<model.APIResponse<void>> scheduleSetConfig(bool enabled, bool emuleEnabled, {int version}) async {
+  Future<model.APIResponse<void>> scheduleSetConfig(bool enabled, bool emuleEnabled, {int? version}) async {
     return setConfigRaw(enabled, emuleEnabled, version: version).then((resp) {
       return model.APIResponse.fromJson(jsonDecode(resp.data), (json) {});
     });
@@ -162,23 +157,20 @@ class Schedule {
 
 class Task {
   final endpoint = '/task.cgi';
-  DownloadStationAPI _parentApi;
-  APIContext _cntx;
+  final DownloadStationAPI _parentApi;
+  final APIContext _cntx;
 
-  Task(DownloadStationAPI dsApi) {
-    _parentApi = dsApi;
-    _cntx = dsApi._cntx;
-  }
+  Task(this._parentApi) : _cntx = _parentApi._cntx;
 
   Future<Response<String>> listRaw(
-      {int version,
+      {int? version,
       int offset = 0,
       int limit = -1,
       List<String> additional = const ['detail', 'transfer', 'file', 'tracker', 'peer']}) async {
     final param = {
       'offset': offset.toString(),
       'limit': limit.toString(),
-      'additional': additional?.join(','),
+      'additional': additional.join(','),
       // detail, transfer, file, tracker, peer
       'api': Syno.DownloadStation.Task,
       'version': version == null ? _cntx.maxApiVersion(Syno.DownloadStation.Task).toString() : version.toString(),
@@ -191,7 +183,7 @@ class Task {
   }
 
   Future<model.APIResponse<model.ListTaskInfo>> list(
-      {int version,
+      {int? version,
       int offset = 0,
       int limit = -1,
       List<String> additional = const ['detail', 'transfer', 'file', 'tracker', 'peer']}) async {
@@ -203,10 +195,10 @@ class Task {
   }
 
   Future<Response<String>> getInfoRaw(List<String> ids,
-      {int version, List<String> additional = const ['detail', 'transfer', 'file', 'tracker', 'peer']}) async {
+      {int? version, List<String> additional = const ['detail', 'transfer', 'file', 'tracker', 'peer']}) async {
     final param = {
       'id': ids.join(','),
-      'additional': additional?.join(','),
+      'additional': additional.join(','),
       // detail, transfer, file, tracker, peer
       'api': Syno.DownloadStation.Task,
       'version': version == null ? _cntx.maxApiVersion(Syno.DownloadStation.Task).toString() : version.toString(),
@@ -220,7 +212,7 @@ class Task {
   }
 
   Future<model.APIResponse<List<model.Task>>> getInfo(List<String> ids,
-      {int version, List<String> additional = const ['detail', 'transfer', 'file', 'tracker', 'peer']}) async {
+      {int? version, List<String> additional = const ['detail', 'transfer', 'file', 'tracker', 'peer']}) async {
     return getInfoRaw(ids, version: version, additional: additional).then((resp) {
       return model.APIResponse.fromJson(jsonDecode(resp.data), (json) {
         if (json.containsKey('tasks')) {
@@ -233,13 +225,13 @@ class Task {
   }
 
   Future<Response<String>> createRaw(
-      {int version,
-      List<String> uris,
-      File file,
-      String username,
-      String passwd,
-      String unzipPasswd,
-      String destination}) async {
+      {int? version,
+      List<String>? uris,
+      File? file,
+      String? username,
+      String? passwd,
+      String? unzipPasswd,
+      String? destination}) async {
     final param = {
       'uri': uris?.join(','),
       'username': username,
@@ -273,13 +265,13 @@ class Task {
   }
 
   Future<model.APIResponse<void>> create(
-      {int version,
-      List<String> uris,
-      File file,
-      String username,
-      String passwd,
-      String unzipPasswd,
-      String destination}) async {
+      {int? version,
+      List<String>? uris,
+      File? file,
+      String? username,
+      String? passwd,
+      String? unzipPasswd,
+      String? destination}) async {
     return createRaw(
             version: version,
             uris: uris,
@@ -293,7 +285,7 @@ class Task {
     });
   }
 
-  Future<Response<String>> deleteRaw(List<String> ids, bool forceComplete, {int version}) async {
+  Future<Response<String>> deleteRaw(List<String> ids, bool forceComplete, {int? version}) async {
     final param = {
       'id': ids.join(','),
       'force_complete': forceComplete.toString(),
@@ -308,14 +300,14 @@ class Task {
   }
 
   Future<model.APIResponse<model.DownloadStationTaskDelete>> delete(List<String> ids, bool forceComplete,
-      {int version}) async {
+      {int? version}) async {
     return deleteRaw(ids, forceComplete, version: version).then((resp) {
       return model.APIResponse.fromJson(
           jsonDecode(resp.data), (json) => model.DownloadStationTaskDelete.fromJson(json));
     });
   }
 
-  Future<Response<String>> pauseRaw(List<String> ids, {int version}) async {
+  Future<Response<String>> pauseRaw(List<String> ids, {int? version}) async {
     final param = {
       'id': ids.join(','),
       'api': Syno.DownloadStation.Task,
@@ -328,13 +320,13 @@ class Task {
     return _cntx.c.getUri(uri);
   }
 
-  Future<model.APIResponse<model.DownloadStationTaskPause>> pause(List<String> ids, {int version}) async {
+  Future<model.APIResponse<model.DownloadStationTaskPause>> pause(List<String> ids, {int? version}) async {
     return pauseRaw(ids, version: version).then((resp) {
       return model.APIResponse.fromJson(jsonDecode(resp.data), (json) => model.DownloadStationTaskPause.fromJson(json));
     });
   }
 
-  Future<Response<String>> resumeRaw(List<String> ids, {int version}) async {
+  Future<Response<String>> resumeRaw(List<String> ids, {int? version}) async {
     final param = {
       'id': ids.join(','),
       'api': Syno.DownloadStation.Task,
@@ -347,14 +339,14 @@ class Task {
     return _cntx.c.getUri(uri);
   }
 
-  Future<model.APIResponse<model.DownloadStationTaskResume>> resume(List<String> ids, {int version}) async {
+  Future<model.APIResponse<model.DownloadStationTaskResume>> resume(List<String> ids, {int? version}) async {
     return resumeRaw(ids, version: version).then((resp) {
       return model.APIResponse.fromJson(
           jsonDecode(resp.data), (json) => model.DownloadStationTaskResume.fromJson(json));
     });
   }
 
-  Future<Response<String>> editRaw(List<String> ids, {String destination, int version}) async {
+  Future<Response<String>> editRaw(List<String> ids, {String? destination, int? version}) async {
     final param = {
       'id': ids.join(','),
       'destination': destination,
@@ -370,7 +362,7 @@ class Task {
   }
 
   Future<model.APIResponse<model.DownloadStationTaskEdit>> taskEdit(List<String> ids,
-      {String destination, int version}) async {
+      {String? destination, int? version}) async {
     return editRaw(ids, destination: destination, version: version).then((resp) {
       return model.APIResponse.fromJson(jsonDecode(resp.data), (json) => model.DownloadStationTaskEdit.fromJson(json));
     });
@@ -379,15 +371,12 @@ class Task {
 
 class Statistic {
   final endpoint = '/statistic.cgi';
-  DownloadStationAPI _parentApi;
-  APIContext _cntx;
+  final DownloadStationAPI _parentApi;
+  late final APIContext _cntx;
 
-  Statistic(DownloadStationAPI dsApi) {
-    _parentApi = dsApi;
-    _cntx = dsApi._cntx;
-  }
+  Statistic(this._parentApi) : _cntx = _parentApi._cntx;
 
-  Future<Response<String>> getInfoRaw({int version}) async {
+  Future<Response<String>> getInfoRaw({int? version}) async {
     final param = {
       'api': Syno.DownloadStation.Statistic,
       'version': version == null ? _cntx.maxApiVersion(Syno.DownloadStation.Statistic).toString() : version.toString(),
@@ -399,7 +388,7 @@ class Statistic {
     return _cntx.c.getUri(uri);
   }
 
-  Future<model.APIResponse<model.DownloadStationStatisticGetInfo>> statGetInfo({int version}) async {
+  Future<model.APIResponse<model.DownloadStationStatisticGetInfo>> statGetInfo({int? version}) async {
     return getInfoRaw(version: version).then((resp) {
       return model.APIResponse.fromJson(
           jsonDecode(resp.data), (json) => model.DownloadStationStatisticGetInfo.fromJson(json));

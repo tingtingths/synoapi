@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 
+import 'api/query.dart';
 import 'auth.dart';
 import 'model.dart';
-import 'api/query.dart';
 
 class LoggingInterceptor extends InterceptorsWrapper {
   @override
@@ -27,22 +27,20 @@ class LoggingInterceptor extends InterceptorsWrapper {
 }
 
 class APIContext {
-  String _proto;
-  String _authority;
-  String _endpoint;
-  Dio _client;
-  final Map<String, String> _appSid = {};
+  final String _proto;
+  final String _authority;
+  final String _endpoint;
+  final Dio _client;
+  Map<String, String> _appSid = {};
   Map<String, APIInfoQuery> _apiInfo = {};
 
-  APIContext(String host, {String proto = 'https', int port = 443, String endpoint = ''}) {
-    _proto = proto;
-    _authority = '$host:$port';
-    _endpoint = endpoint;
-    _client = Dio()..interceptors.add(LoggingInterceptor());
-    //_client = Dio();
-  }
+  APIContext(String host, {String proto = 'https', int port = 443, String endpoint = ''})
+      : _proto = proto,
+        _authority = '$host:$port',
+        _endpoint = endpoint,
+        _client = Dio()..interceptors.add(LoggingInterceptor());
 
-  Uri buildUri(String path, Map<String, String> queryParams) {
+  Uri buildUri(String path, Map<String, String?>? queryParams) {
     if (_proto == 'http') {
       return Uri.http(_authority, _endpoint + path, queryParams);
     } else if (_proto == 'https') {

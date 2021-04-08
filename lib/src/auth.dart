@@ -5,14 +5,12 @@ import 'context.dart';
 
 class AuthAPIRaw {
   final endpoint = '/webapi/auth.cgi';
-  APIContext _cntx;
+  final APIContext _cntx;
 
-  AuthAPIRaw(APIContext cntx) {
-    _cntx = cntx;
-  }
+  AuthAPIRaw(this._cntx);
 
   Future<Response<String>> login(String account, String passwd, String session,
-      {int version: 2, String format: 'sid', String otpCode}) async {
+      {int version = 2, String format = 'sid', String? otpCode}) async {
     final param = {
       'account': account,
       'passwd': passwd,
@@ -29,7 +27,7 @@ class AuthAPIRaw {
     return await _cntx.c.getUri(uri);
   }
 
-  logout(String session) async {
+  void logout(String session) async {
     final param = {
       'api': Syno.API.Auth,
       'version': '1',
