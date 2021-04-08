@@ -1,6 +1,4 @@
-import 'package:synoapi/synoapi.dart';
-import 'package:test/test.dart';
+import 'package:synoapi/synoapi.dart' as api;
 
 void main() {
-
 }
