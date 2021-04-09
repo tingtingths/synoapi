@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 import 'config.dart';
 
 void main() {
-  Logger.root.level = Level.INFO;
+  Logger.root.level = Level.FINE;
   Logger.root.onRecord.listen((l) {
     print('${l.time} ${l.level} ${l.loggerName} | ${l.message}${l.error ?? ''}${l.stackTrace ?? ''}');
   });
@@ -52,6 +52,10 @@ void main() {
     test('Test Get RSS Sites', () async {
       final resp = await dsApi.rss.site.list();
       expect(resp, isNotNull);
+      expect(resp.success, isTrue);
+      resp.data!.sites.forEach((site) {
+        l.info('${site.title} - ${site.url}');
+      });
     });
   });
 }
