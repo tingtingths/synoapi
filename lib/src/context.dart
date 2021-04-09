@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
@@ -21,13 +22,14 @@ class LoggingInterceptor extends InterceptorsWrapper {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    l.fine('< ${response.statusCode} ${response.data}');
+    final data = response.data.toString();
+    l.fine('< ${response.statusCode} ${data.substring(0, min(data.length, 256))}');
     handler.next(response);
   }
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
-    l.fine('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
+    l.warning('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
     handler.next(err);
   }
 }
