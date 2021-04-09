@@ -59,7 +59,7 @@ class Info {
   Future<model.APIResponse<model.DownloadStationInfoGetInfo>> getInfo({int? version}) async {
     return getInfoRaw(version: version).then((resp) {
       return model.APIResponse.fromJson(
-          jsonDecode(resp.data), (json) => model.DownloadStationInfoGetInfo.fromJson(json));
+          jsonDecode(resp.data!), (json) => model.DownloadStationInfoGetInfo.fromJson(json));
     });
   }
 
@@ -79,7 +79,7 @@ class Info {
   Future<model.APIResponse<model.DownloadStationInfoGetConfig>> getConfig({int? version}) async {
     return getConfigRaw(version: version).then((resp) {
       return model.APIResponse.fromJson(
-          jsonDecode(resp.data), (json) => model.DownloadStationInfoGetConfig.fromJson(json));
+          jsonDecode(resp.data!), (json) => model.DownloadStationInfoGetConfig.fromJson(json));
     });
   }
 
@@ -100,7 +100,7 @@ class Info {
 
   Future<model.APIResponse<void>> setServerConfig(Map<String, String> config, {int? version}) async {
     return setServerConfigRaw(config, version: version).then((resp) {
-      return model.APIResponse.fromJson(jsonDecode(resp.data), (json) {});
+      return model.APIResponse.fromJson(jsonDecode(resp.data!), (json) {});
     });
   }
 }
@@ -128,7 +128,7 @@ class Schedule {
   Future<model.APIResponse<model.DownloadStationScheduleGetConfig>> scheduleGetConfig({int? version}) async {
     return getConfigRaw(version: version).then((resp) {
       return model.APIResponse.fromJson(
-          jsonDecode(resp.data), (json) => model.DownloadStationScheduleGetConfig.fromJson(json));
+          jsonDecode(resp.data!), (json) => model.DownloadStationScheduleGetConfig.fromJson(json));
     });
   }
 
@@ -150,7 +150,7 @@ class Schedule {
 
   Future<model.APIResponse<void>> scheduleSetConfig(bool enabled, bool emuleEnabled, {int? version}) async {
     return setConfigRaw(enabled, emuleEnabled, version: version).then((resp) {
-      return model.APIResponse.fromJson(jsonDecode(resp.data), (json) {});
+      return model.APIResponse.fromJson(jsonDecode(resp.data!), (json) {});
     });
   }
 }
@@ -188,7 +188,7 @@ class Task {
       int limit = -1,
       List<String> additional = const ['detail', 'transfer', 'file', 'tracker', 'peer']}) async {
     return listRaw(version: version, offset: offset, limit: limit, additional: additional).then((resp) {
-      return model.APIResponse<model.ListTaskInfo>.fromJson(jsonDecode(resp.data), (data) {
+      return model.APIResponse<model.ListTaskInfo>.fromJson(jsonDecode(resp.data!), (data) {
         return model.ListTaskInfo.fromJson(data);
       });
     });
@@ -214,7 +214,7 @@ class Task {
   Future<model.APIResponse<List<model.Task>>> getInfo(List<String> ids,
       {int? version, List<String> additional = const ['detail', 'transfer', 'file', 'tracker', 'peer']}) async {
     return getInfoRaw(ids, version: version, additional: additional).then((resp) {
-      return model.APIResponse.fromJson(jsonDecode(resp.data), (json) {
+      return model.APIResponse.fromJson(jsonDecode(resp.data!), (json) {
         if (json.containsKey('tasks')) {
           List<dynamic> tasks = (json ?? {})['tasks'];
           return tasks.map((e) => model.Task.fromJson(e)).toList();
@@ -281,7 +281,7 @@ class Task {
             unzipPasswd: unzipPasswd,
             destination: destination)
         .then((resp) {
-      return model.APIResponse.fromJson(jsonDecode(resp.data), (json) {});
+      return model.APIResponse.fromJson(jsonDecode(resp.data!), (json) {});
     });
   }
 
@@ -303,7 +303,7 @@ class Task {
       {int? version}) async {
     return deleteRaw(ids, forceComplete, version: version).then((resp) {
       return model.APIResponse.fromJson(
-          jsonDecode(resp.data), (json) => model.DownloadStationTaskDelete.fromJson(json));
+          jsonDecode(resp.data!), (json) => model.DownloadStationTaskDelete.fromJson(json));
     });
   }
 
@@ -322,7 +322,8 @@ class Task {
 
   Future<model.APIResponse<model.DownloadStationTaskPause>> pause(List<String> ids, {int? version}) async {
     return pauseRaw(ids, version: version).then((resp) {
-      return model.APIResponse.fromJson(jsonDecode(resp.data), (json) => model.DownloadStationTaskPause.fromJson(json));
+      return model.APIResponse.fromJson(
+          jsonDecode(resp.data!), (json) => model.DownloadStationTaskPause.fromJson(json));
     });
   }
 
@@ -342,7 +343,7 @@ class Task {
   Future<model.APIResponse<model.DownloadStationTaskResume>> resume(List<String> ids, {int? version}) async {
     return resumeRaw(ids, version: version).then((resp) {
       return model.APIResponse.fromJson(
-          jsonDecode(resp.data), (json) => model.DownloadStationTaskResume.fromJson(json));
+          jsonDecode(resp.data!), (json) => model.DownloadStationTaskResume.fromJson(json));
     });
   }
 
@@ -364,7 +365,7 @@ class Task {
   Future<model.APIResponse<model.DownloadStationTaskEdit>> taskEdit(List<String> ids,
       {String? destination, int? version}) async {
     return editRaw(ids, destination: destination, version: version).then((resp) {
-      return model.APIResponse.fromJson(jsonDecode(resp.data), (json) => model.DownloadStationTaskEdit.fromJson(json));
+      return model.APIResponse.fromJson(jsonDecode(resp.data!), (json) => model.DownloadStationTaskEdit.fromJson(json));
     });
   }
 }
@@ -391,7 +392,7 @@ class Statistic {
   Future<model.APIResponse<model.DownloadStationStatisticGetInfo>> statGetInfo({int? version}) async {
     return getInfoRaw(version: version).then((resp) {
       return model.APIResponse.fromJson(
-          jsonDecode(resp.data), (json) => model.DownloadStationStatisticGetInfo.fromJson(json));
+          jsonDecode(resp.data!), (json) => model.DownloadStationStatisticGetInfo.fromJson(json));
     });
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'util/extension.dart';
 import 'util/util.dart';
 
@@ -15,7 +17,8 @@ enum TaskStatus {
 }
 
 extension TaskStatusMembers on TaskStatus {
-  String get name => const {
+  String get name =>
+      const {
         TaskStatus.waiting: 'waiting',
         TaskStatus.downloading: 'downloading',
         TaskStatus.paused: 'paused',
@@ -26,183 +29,124 @@ extension TaskStatusMembers on TaskStatus {
         TaskStatus.filehosting_waiting: 'filehosting_waiting',
         TaskStatus.extracting: 'extracting',
         TaskStatus.error: 'error',
-      }[this] ?? '';
+      }[this] ??
+      '';
 }
 
 class APIResponse<T> {
-  final bool _success;
-  T? _data;
-  Map<String, dynamic>? _error;
+  final bool success;
+  T? data;
+  Map<String, dynamic>? error;
 
-  Map<String, dynamic>? get error => _error;
-
-  T? get data => _data;
-
-  bool get success => _success;
-
-  APIResponse(this._success, this._data, this._error);
+  APIResponse(this.success, this.data, this.error);
 
   APIResponse.fromJson(Map<String, dynamic>? json, T Function(dynamic data) create)
-      : _success = mapGet(json, 'success', otherwise: false) {
-    _error = mapGet(json, 'error');
+      : success = mapGet(json, 'success', otherwise: false) {
+    error = mapGet(json, 'error');
     mapGet(json, 'data', ifPresent: (value) {
-      _data = create(value);
+      data = create(value);
     });
   }
 }
 
 class APIInfoQuery {
-  String? _key;
-  String? _path;
-  int? _minVersion;
-  int? _maxVersion;
-
-  int? get maxVersion => _maxVersion;
-
-  int? get minVersion => _minVersion;
-
-  String? get path => _path;
-
-  String? get key => _key;
+  String? key;
+  String? path;
+  int? minVersion;
+  int? maxVersion;
 
   APIInfoQuery.fromJson(Map<String, dynamic>? json) {
-    _key = mapGet(json, 'key');
-    _path = mapGet(json, 'path');
-    _minVersion = mapGet(json, 'minVersion');
-    _maxVersion = mapGet(json, 'maxVersion');
+    key = mapGet(json, 'key');
+    path = mapGet(json, 'path');
+    minVersion = mapGet(json, 'minVersion');
+    maxVersion = mapGet(json, 'maxVersion');
   }
 }
 
 class DownloadStationInfoGetInfo {
-  int? _version;
-  String? _versionString;
-  bool? _isManager;
-
-  int? get version => _version;
-
-  String? get versionString => _versionString;
-
-  bool? get isManager => _isManager;
+  int? version;
+  String? versionString;
+  bool? isManager;
 
   DownloadStationInfoGetInfo.fromJson(Map<String, dynamic> json) {
-    _version = (json ?? {})['version'];
-    _versionString = (json ?? {})['version_string'];
-    _isManager = (json ?? {})['is_manager'];
+    version = mapGet(json, 'version');
+    versionString = mapGet(json, 'version_string');
+    isManager = mapGet(json, 'is_manager');
   }
 }
 
 class DownloadStationInfoGetConfig {
-  int? _btMaxDownload;
-  int? _btMaxUpload;
-  int? _emuleMaxDownload;
-  int? _emuleMaxUpload;
-  int? _nzbMaxDownload;
-  int? _httpMaxDownload;
-  int? _ftpMaxDownload;
-  bool? _emuleEnabled;
-  bool? _unzipServiceEnabled;
-  String? _defaultDestination;
-  String? _emuleDefaultDestination;
+  int? btMaxDownload;
+  int? btMaxUpload;
+  int? emuleMaxDownload;
+  int? emuleMaxUpload;
+  int? nzbMaxDownload;
+  int? httpMaxDownload;
+  int? ftpMaxDownload;
+  bool? emuleEnabled;
+  bool? unzipServiceEnabled;
+  String? defaultDestination;
+  String? emuleDefaultDestination;
 
   DownloadStationInfoGetConfig.fromJson(Map<String, dynamic> json) {
-    _btMaxDownload = mapGet(json, 'bt_max_download');
-    _btMaxUpload = mapGet(json, 'bt_max_upload');
-    _emuleMaxDownload = mapGet(json, 'emule_max_download');
-    _emuleMaxUpload = mapGet(json, 'emule_max_upload');
-    _nzbMaxDownload = mapGet(json, 'nzb_max_download');
-    _httpMaxDownload = mapGet(json, 'http_max_download');
-    _ftpMaxDownload = mapGet(json, 'ftp_max_download');
-    _emuleEnabled = mapGet(json, 'emule_enabled');
-    _unzipServiceEnabled = mapGet(json, 'unzip_service_enabled');
-    _defaultDestination = mapGet(json, 'default_destination');
-    _emuleDefaultDestination = mapGet(json, 'emule_default_destination');
+    btMaxDownload = mapGet(json, 'bt_max_download');
+    btMaxUpload = mapGet(json, 'bt_max_upload');
+    emuleMaxDownload = mapGet(json, 'emule_max_download');
+    emuleMaxUpload = mapGet(json, 'emule_max_upload');
+    nzbMaxDownload = mapGet(json, 'nzb_max_download');
+    httpMaxDownload = mapGet(json, 'http_max_download');
+    ftpMaxDownload = mapGet(json, 'ftp_max_download');
+    emuleEnabled = mapGet(json, 'emule_enabled');
+    unzipServiceEnabled = mapGet(json, 'unzip_service_enabled');
+    defaultDestination = mapGet(json, 'default_destination');
+    emuleDefaultDestination = mapGet(json, 'emule_default_destination');
   }
-
-  int? get btMaxDownload => _btMaxDownload;
-
-  int? get btMaxUpload => _btMaxUpload;
-
-  int? get emuleMaxDownload => _emuleMaxDownload;
-
-  int? get emuleMaxUpload => _emuleMaxUpload;
-
-  int? get nzbMaxDownload => _nzbMaxDownload;
-
-  int? get httpMaxDownload => _httpMaxDownload;
-
-  int? get ftpMaxDownload => _ftpMaxDownload;
-
-  bool? get emuleEnabled => _emuleEnabled;
-
-  bool? get unzipServiceEnabled => _unzipServiceEnabled;
-
-  String? get defaultDestination => _defaultDestination;
-
-  String? get emuleDefaultDestination => _emuleDefaultDestination;
 }
 
 class DownloadStationScheduleGetConfig {
-  bool? _enabled;
-  bool? _emuleEnabled;
+  bool? enabled;
+  bool? emuleEnabled;
 
   DownloadStationScheduleGetConfig.fromJson(Map<String, dynamic> json) {
-    _enabled = mapGet(json, 'enabled');
-    _emuleEnabled = mapGet(json, 'emule_enabled');
+    enabled = mapGet(json, 'enabled');
+    emuleEnabled = mapGet(json, 'emule_enabled');
   }
-
-  bool? get emuleEnabled => _emuleEnabled;
-
-  bool? get enabled => _enabled;
 }
 
 class DownloadStationStatisticGetInfo {
-  int? _speedDownload;
-  int? _speedUpload;
-  int? _emuleSpeedDownload;
-  int? _emuleSpeedUpload;
+  int? speedDownload;
+  int? speedUpload;
+  int? emuleSpeedDownload;
+  int? emuleSpeedUpload;
 
   DownloadStationStatisticGetInfo.fromJson(Map<String, dynamic> json) {
-    _speedDownload = mapGet(json, 'speed_download');
-    _speedUpload = mapGet(json, 'speed_upload');
-    _emuleSpeedDownload = mapGet(json, 'emule_speed_download');
-    _emuleSpeedUpload = mapGet(json, 'emule_speed_upload');
+    speedDownload = mapGet(json, 'speed_download');
+    speedUpload = mapGet(json, 'speed_upload');
+    emuleSpeedDownload = mapGet(json, 'emule_speed_download');
+    emuleSpeedUpload = mapGet(json, 'emule_speed_upload');
   }
-
-  int? get emuleSpeedUpload => _emuleSpeedUpload;
-
-  int? get emuleSpeedDownload => _emuleSpeedDownload;
-
-  int? get speedUpload => _speedUpload;
-
-  int? get speedDownload => _speedDownload;
 }
 
 class _DownloadStationTaskActionResponse {
-  String? _id;
-  int? _error;
+  String? id;
+  int? error;
 
   _DownloadStationTaskActionResponse.fromJson(Map<String, dynamic> json) {
-    _id = mapGet(json, 'id');
-    _error = mapGet(json, 'error');
+    id = mapGet(json, 'id');
+    error = mapGet(json, 'error');
   }
-
-  int? get error => _error;
-
-  String? get id => _id;
 }
 
 class _DownloadStationMultiTaskActionResponse {
-  List<_DownloadStationTaskActionResponse> _responses = [];
+  List<_DownloadStationTaskActionResponse> responses = [];
 
   _DownloadStationMultiTaskActionResponse.fromJson(List<dynamic>? json) {
     if (json != null) {
-      _responses = json.map((el) {
+      responses = json.map((el) {
         return _DownloadStationTaskActionResponse.fromJson(el);
       }).toList();
     }
   }
-
-  List<_DownloadStationTaskActionResponse> get responses => _responses;
 }
 
 class DownloadStationTaskDelete extends _DownloadStationMultiTaskActionResponse {
@@ -222,66 +166,48 @@ class DownloadStationTaskEdit extends _DownloadStationTaskActionResponse {
 }
 
 class ListTaskInfo {
-  int _total = 0;
-  int _offset = 0;
-  List<Task> _tasks = [];
+  int total = 0;
+  int offset = 0;
+  List<Task> tasks = [];
 
-  ListTaskInfo(this._total, this._offset, this._tasks);
+  ListTaskInfo(this.total, this.offset, this.tasks);
 
   ListTaskInfo.fromJson(Map<String, dynamic> json) {
-    _total = mapGet(json, 'total');
-    _offset = mapGet(json, 'offset');
-    mapGet(json, 'tasks', ifPresent: (List<String> tasks) {
-      _tasks.addAll(tasks.map((e) => Task.fromJson(json)));
+    total = mapGet(json, 'total');
+    offset = mapGet(json, 'offset');
+    mapGet(json, 'tasks', ifPresent: (List<dynamic> tasksJson) {
+      tasks.addAll(tasksJson.map((e) => Task.fromJson(jsonDecode(e))));
     });
-  }
-
-  int get total => _total;
-
-  set total(int value) {
-    _total = value;
-  }
-
-  int get offset => _offset;
-
-  set offset(int value) {
-    _offset = value;
-  }
-
-  List<Task> get tasks => _tasks;
-
-  set tasks(List<Task> value) {
-    _tasks = value;
   }
 }
 
 class Task {
-  String? _id;
-  String? _type;
-  String? _username;
-  String? _title;
-  int? _size;
+  String? id;
+  String? type;
+  String? username;
+  String? title;
+  int? size;
   String? _status;
-  StatusExtra? _statusExtra;
-  Additional? _additional;
+  StatusExtra? statusExtra;
+  Additional? additional;
 
   Task.fromJson(Map<String, dynamic> json) {
-    _id = mapGet(json, 'id');
-    _type = mapGet(json, 'type');
-    _username = mapGet(json, 'username');
-    _title = mapGet(json, 'title');
-    _size = mapGet(json, 'size');
+    id = mapGet(json, 'id');
+    type = mapGet(json, 'type');
+    username = mapGet(json, 'username');
+    title = mapGet(json, 'title');
+    size = mapGet(json, 'size');
     _status = mapGet(json, 'status');
     mapGet(json, 'status_extra', ifPresent: (Map<String, dynamic> val) {
-      _statusExtra = StatusExtra.fromJson(val);
+      statusExtra = StatusExtra.fromJson(val);
     });
     mapGet(json, 'additional', ifPresent: (Map<String, dynamic> val) {
-      _additional = Additional.fromJson(val);
+      additional = Additional.fromJson(val);
     });
   }
 
-  set status(TaskStatus? st) {
-    _status = st?.name;
+  set status(TaskStatus? status) {
+    _status = status?.name;
   }
 
   TaskStatus? get status {
@@ -321,218 +247,142 @@ class Task {
 }
 
 class Additional {
-  TaskDetail? _detail;
-  TaskTransfer? _transfer;
-  List<TaskFile>? _file;
-  List<TaskTracker>? _tracker;
-  List<TaskPeer>? _peer;
+  TaskDetail? detail;
+  TaskTransfer? transfer;
+  List<TaskFile>? file;
+  List<TaskTracker>? tracker;
+  List<TaskPeer>? peer;
 
   Additional.fromJson(Map<String, dynamic> json) {
-    _detail = TaskDetail.fromJson((json ?? {})['detail']);
-    _transfer = TaskTransfer.fromJson((json ?? {})['transfer']);
-    _file = ((json ?? {}).containsKey('file') ? json['file'] as List : []).map((e) => TaskFile.fromJson(e)).toList();
-    _tracker = ((json ?? {}).containsKey('tracker') ? json['tracker'] as List : [])
-        .map((e) => TaskTracker.fromJson(e))
-        .toList();
-    _peer = ((json ?? {}).containsKey('peer') ? json['peer'] as List : []).map((e) => TaskPeer.fromJson(e)).toList();
+    detail = TaskDetail.fromJson(mapGet(json, 'detail'));
+    transfer = TaskTransfer.fromJson(mapGet(json, 'transfer'));
+    mapGet(json, 'file', ifPresent: (value) {
+      file = (value as List).map((e) => TaskFile.fromJson(e)).toList();
+    });
+    mapGet(json, 'tracker', ifPresent: (value) {
+      tracker = (value as List).map((e) => TaskTracker.fromJson(e)).toList();
+    });
+    mapGet(json, 'peer', ifPresent: (value) {
+      peer = (value as List).map((e) => TaskPeer.fromJson(e)).toList();
+    });
   }
-
-  List<TaskPeer> get peer => _peer;
-
-  List<TaskTracker> get tracker => _tracker;
-
-  List<TaskFile> get file => _file;
-
-  TaskTransfer get transfer => _transfer;
-
-  TaskDetail get detail => _detail;
 }
 
 class StatusExtra {
-  String _errorDetail;
-  int _unzipProgress;
+  String? errorDetail;
+  int? unzipProgress;
 
   StatusExtra.fromJson(Map<String, dynamic> json) {
-    _errorDetail = (json ?? {})['error_detail'];
-    _errorDetail = (json ?? {})['error_detail'];
-    _unzipProgress = (json ?? {})['unzip_progress'];
+    errorDetail = mapGet(json, 'error_detail');
+    unzipProgress = mapGet(json, 'unzip_progress');
   }
 }
 
 class TaskDetail {
-  String _destination;
-  String _uri;
-  DateTime _createTime;
-  DateTime _startedTime;
-  DateTime _completedTime;
-  String _priority;
-  int _totalPeers;
-  int _connectedSeeders;
-  int _connectedLeechers;
-
-  int _connectedPeers;
-  int _seedElapsed;
-  String _unzipPassword;
-  int _waitingSeconds;
-  int _totalPieces;
+  String? destination;
+  String? uri;
+  DateTime? createTime;
+  DateTime? startedTime;
+  DateTime? completedTime;
+  String? priority;
+  int? totalPeers;
+  int? connectedSeeders;
+  int? connectedLeechers;
+  int? connectedPeers;
+  int? seedElapsed;
+  String? unzipPassword;
+  int? waitingSeconds;
+  int? totalPieces;
 
   TaskDetail.fromJson(Map<String, dynamic> json) {
-    _destination = (json ?? {})['destination'];
-    _uri = (json ?? {})['uri'];
+    destination = mapGet(json, 'destination');
+    uri = mapGet(json, 'uri');
     try {
-      int ts = (json ?? {})['create_time'];
-      if (ts != null && ts > 0) _createTime = DateTime.fromMillisecondsSinceEpoch(ts * 1000);
+      int ts = mapGet(json, 'create_time');
+      if (ts != null && ts > 0) createTime = DateTime.fromMillisecondsSinceEpoch(ts * 1000);
 
-      ts = (json ?? {})['started_time'];
-      if (ts != null && ts > 0) _startedTime = DateTime.fromMillisecondsSinceEpoch(ts * 1000);
+      ts = mapGet(json, 'started_time');
+      if (ts != null && ts > 0) startedTime = DateTime.fromMillisecondsSinceEpoch(ts * 1000);
 
-      ts = (json ?? {})['completed_time'];
-      if (ts != null && ts > 0) _completedTime = DateTime.fromMillisecondsSinceEpoch(ts * 1000);
+      ts = mapGet(json, 'completed_time');
+      if (ts != null && ts > 0) completedTime = DateTime.fromMillisecondsSinceEpoch(ts * 1000);
     } catch (e) {
       print(e);
     }
-    _priority = (json ?? {})['priority'];
-    _totalPeers = (json ?? {})['total_peers'];
-    _connectedSeeders = (json ?? {})['connected_seeders'];
-    _connectedLeechers = (json ?? {})['connected_leechers'];
-    _connectedPeers = (json ?? {})['connected_peers'];
-    _seedElapsed = (json ?? {})['seedelapsed'];
-    _unzipPassword = (json ?? {})['unzip_password'];
-    _waitingSeconds = (json ?? {})['waiting_seconds'];
-    _totalPieces = (json ?? {})['total_pieces'];
+    priority = mapGet(json, 'priority');
+    totalPeers = mapGet(json, 'total_peers');
+    connectedSeeders = mapGet(json, 'connected_seeders');
+    connectedLeechers = mapGet(json, 'connected_leechers');
+    connectedPeers = mapGet(json, 'connected_peers');
+    seedElapsed = mapGet(json, 'seedelapsed');
+    unzipPassword = mapGet(json, 'unzip_password');
+    waitingSeconds = mapGet(json, 'waiting_seconds');
+    totalPieces = mapGet(json, 'total_pieces');
   }
-
-  int get connectedLeechers => _connectedLeechers;
-
-  int get connectedSeeders => _connectedSeeders;
-
-  int get totalPeers => _totalPeers;
-
-  String get priority => _priority;
-
-  DateTime get createTime => _createTime;
-
-  DateTime get startedTime => _startedTime;
-
-  String get uri => _uri;
-
-  String get destination => _destination;
-
-  DateTime get completedTime => _completedTime;
-
-  int get waitingSeconds => _waitingSeconds;
-
-  String get unzipPassword => _unzipPassword;
-
-  int get seedElapsed => _seedElapsed;
-
-  int get connectedPeers => _connectedPeers;
-
-  int get totalPieces => _totalPieces;
 }
 
 class TaskTransfer {
-  int _downloadedPieces;
-  int _sizeDownloaded;
-  int _sizeUploaded;
-  int _speedDownload;
-  int _speedUpload;
+  int? downloadedPieces;
+  int? sizeDownloaded;
+  int? sizeUploaded;
+  int? speedDownload;
+  int? speedUpload;
 
   TaskTransfer.fromJson(Map<String, dynamic> json) {
-    _downloadedPieces = (json ?? {})['downloaded_pieces'];
-    _sizeDownloaded = (json ?? {})['size_downloaded'];
-    _sizeUploaded = (json ?? {})['size_uploaded'];
-    _speedDownload = (json ?? {})['speed_download'];
-    _speedUpload = (json ?? {})['speed_upload'];
+    downloadedPieces = mapGet(json, 'downloaded_pieces');
+    sizeDownloaded = mapGet(json, 'size_downloaded');
+    sizeUploaded = mapGet(json, 'size_uploaded');
+    speedDownload = mapGet(json, 'speed_download');
+    speedUpload = mapGet(json, 'speed_upload');
   }
-
-  int get speedUpload => _speedUpload;
-
-  int get speedDownload => _speedDownload;
-
-  int get sizeUploaded => _sizeUploaded;
-
-  int get sizeDownloaded => _sizeDownloaded;
-
-  int get downloadedPieces => _downloadedPieces;
 }
 
 class TaskFile {
-  String _filename;
-  int _index;
-  int _size;
-  int _sizeDownloaded;
-  String _priority;
-  bool _wanted;
+  String? filename;
+  int? index;
+  int? size;
+  int? sizeDownloaded;
+  String? priority;
+  bool? wanted;
 
   TaskFile.fromJson(Map<String, dynamic> json) {
-    _filename = (json ?? {})['filename'];
-    _index = (json ?? {})['index'];
-    _size = (json ?? {})['size'];
-    _sizeDownloaded = (json ?? {})['size_downloaded'];
-    _priority = (json ?? {})['priority'];
-    _wanted = (json ?? {})['wanted'];
+    filename = mapGet(json, 'filename');
+    index = mapGet(json, 'index');
+    size = mapGet(json, 'size');
+    sizeDownloaded = mapGet(json, 'size_downloaded');
+    priority = mapGet(json, 'priority');
+    wanted = mapGet(json, 'wanted');
   }
-
-  String get priority => _priority;
-
-  int get sizeDownloaded => _sizeDownloaded;
-
-  int get size => _size;
-
-  String get filename => _filename;
-
-  bool get wanted => _wanted;
 }
 
 class TaskTracker {
-  String _url;
-  String _status;
-  int _updateTimer;
-  int _seeds;
-  int _peers;
+  String? url;
+  String? status;
+  int? updateTimer;
+  int? seeds;
+  int? peers;
 
   TaskTracker.fromJson(Map<String, dynamic> json) {
-    _url = (json ?? {})['url'];
-    _status = (json ?? {})['status'];
-    _updateTimer = (json ?? {})['update_timer'];
-    _seeds = (json ?? {})['seeds'];
-    _peers = (json ?? {})['peers'];
+    url = mapGet(json, 'url');
+    status = mapGet(json, 'status');
+    updateTimer = mapGet(json, 'update_timer');
+    seeds = mapGet(json, 'seeds');
+    peers = mapGet(json, 'peers');
   }
-
-  int get peers => _peers;
-
-  int get seeds => _seeds;
-
-  int get updateTimer => _updateTimer;
-
-  String get status => _status;
-
-  String get url => _url;
 }
 
 class TaskPeer {
-  String _address;
-  String _agent;
-  num _progress;
-  int _speedDownload;
-  int _speedUpload;
+  String? address;
+  String? agent;
+  num? progress;
+  int? speedDownload;
+  int? speedUpload;
 
   TaskPeer.fromJson(Map<String, dynamic> json) {
-    _address = (json ?? {})['address'];
-    _agent = (json ?? {})['agent'];
-    _progress = (json ?? {})['progress'];
-    _speedDownload = (json ?? {})['speed_download'];
-    _speedUpload = (json ?? {})['speed_upload'];
+    address = mapGet(json, 'address');
+    agent = mapGet(json, 'agent');
+    progress = mapGet(json, 'progress');
+    speedDownload = mapGet(json, 'speed_download');
+    speedUpload = mapGet(json, 'speed_upload');
   }
-
-  int get speedUpload => _speedUpload;
-
-  int get speedDownload => _speedDownload;
-
-  num get progress => _progress;
-
-  String get agent => _agent;
-
-  String get address => _address;
 }
