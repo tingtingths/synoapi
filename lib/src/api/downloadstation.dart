@@ -428,7 +428,7 @@ class RSS {
 
 class RSSSite {
   final RSS _parentApi;
-  final endpoint = '/RSSSite.cgi';
+  final endpoint = '/RSSsite.cgi';
   late final APIContext _cntx;
 
   RSSSite(this._parentApi) : _cntx = _parentApi._cntx;

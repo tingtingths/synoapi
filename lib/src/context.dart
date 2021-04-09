@@ -55,6 +55,8 @@ class APIContext {
   }
 
   Uri buildUri(String path, Map<String, String?>? queryParams) {
+    queryParams ??= {};
+    queryParams.removeWhere((key, value) => value == null);
     if (_proto == 'http') {
       return Uri.http(_authority, _endpoint + path, queryParams);
     } else if (_proto == 'https') {
