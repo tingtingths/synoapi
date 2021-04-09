@@ -37,15 +37,21 @@ class APIResponse<T> {
   final bool success;
   T? data;
   Map<String, dynamic>? error;
+  String? _rawJson;
 
   APIResponse(this.success, this.data, this.error);
 
   APIResponse.fromJson(Map<String, dynamic>? json, T Function(dynamic data) create)
       : success = mapGet(json, 'success', otherwise: false) {
+    if (json != null) {
+      _rawJson = jsonEncode(json);
+    }
     error = mapGet(json, 'error');
-    mapGet(json, 'data', ifPresent: (value) {
-      data = create(value);
-    });
+    data = mapGet(json, 'data', mapper: create);
+  }
+
+  String? get raw {
+    return _rawJson;
   }
 }
 
@@ -175,8 +181,9 @@ class ListTaskInfo {
   ListTaskInfo.fromJson(Map<String, dynamic> json) {
     total = mapGet(json, 'total');
     offset = mapGet(json, 'offset');
-    mapGet(json, 'tasks', ifPresent: (List<dynamic> tasksJson) {
-      tasks.addAll(tasksJson.map((e) => Task.fromJson(jsonDecode(e))));
+
+    tasks = mapGet(json, 'tasks', mapper: (List<dynamic> tasksJson) {
+      return tasksJson.map((e) => Task.fromJson(jsonDecode(e))).toList();
     });
   }
 }
@@ -198,12 +205,8 @@ class Task {
     title = mapGet(json, 'title');
     size = mapGet(json, 'size');
     _status = mapGet(json, 'status');
-    mapGet(json, 'status_extra', ifPresent: (Map<String, dynamic> val) {
-      statusExtra = StatusExtra.fromJson(val);
-    });
-    mapGet(json, 'additional', ifPresent: (Map<String, dynamic> val) {
-      additional = Additional.fromJson(val);
-    });
+    statusExtra = mapGet(json, 'status_extra', mapper: (val) => StatusExtra.fromJson(val));
+    additional = mapGet(json, 'additional', mapper: (val) => Additional.fromJson(val));
   }
 
   set status(TaskStatus? status) {
@@ -256,14 +259,14 @@ class Additional {
   Additional.fromJson(Map<String, dynamic> json) {
     detail = TaskDetail.fromJson(mapGet(json, 'detail'));
     transfer = TaskTransfer.fromJson(mapGet(json, 'transfer'));
-    mapGet(json, 'file', ifPresent: (value) {
-      file = (value as List).map((e) => TaskFile.fromJson(e)).toList();
+    file = mapGet(json, 'file', mapper: (value) {
+      return (value as List).map((e) => TaskFile.fromJson(e)).toList();
     });
-    mapGet(json, 'tracker', ifPresent: (value) {
-      tracker = (value as List).map((e) => TaskTracker.fromJson(e)).toList();
+    tracker = mapGet(json, 'tracker', mapper: (value) {
+      return (value as List).map((e) => TaskTracker.fromJson(e)).toList();
     });
-    mapGet(json, 'peer', ifPresent: (value) {
-      peer = (value as List).map((e) => TaskPeer.fromJson(e)).toList();
+    peer = mapGet(json, 'peer', mapper: (value) {
+      return (value as List).map((e) => TaskPeer.fromJson(e)).toList();
     });
   }
 }
@@ -297,18 +300,18 @@ class TaskDetail {
   TaskDetail.fromJson(Map<String, dynamic> json) {
     destination = mapGet(json, 'destination');
     uri = mapGet(json, 'uri');
-    try {
-      int ts = mapGet(json, 'create_time');
-      if (ts != null && ts > 0) createTime = DateTime.fromMillisecondsSinceEpoch(ts * 1000);
 
-      ts = mapGet(json, 'started_time');
-      if (ts != null && ts > 0) startedTime = DateTime.fromMillisecondsSinceEpoch(ts * 1000);
+    // parse long timestamp
+    createTime = mapGet(json, 'create_time', mapper: (ts) {
+      return DateTime.fromMillisecondsSinceEpoch(ts * 1000);
+    });
+    startedTime = mapGet(json, 'started_time', mapper: (ts) {
+      return DateTime.fromMillisecondsSinceEpoch(ts * 1000);
+    });
+    completedTime = mapGet(json, 'completed_time', mapper: (ts) {
+      return DateTime.fromMillisecondsSinceEpoch(ts * 1000);
+    });
 
-      ts = mapGet(json, 'completed_time');
-      if (ts != null && ts > 0) completedTime = DateTime.fromMillisecondsSinceEpoch(ts * 1000);
-    } catch (e) {
-      print(e);
-    }
     priority = mapGet(json, 'priority');
     totalPeers = mapGet(json, 'total_peers');
     connectedSeeders = mapGet(json, 'connected_seeders');
@@ -384,5 +387,39 @@ class TaskPeer {
     progress = mapGet(json, 'progress');
     speedDownload = mapGet(json, 'speed_download');
     speedUpload = mapGet(json, 'speed_upload');
+  }
+}
+
+class DownloadStationRSSSiteList {
+  int total = 0;
+  int offset = 0;
+  List<Site> sites = [];
+
+  DownloadStationRSSSiteList.fromJson(Map<String, dynamic> json) {
+    total = mapGet(json, 'total');
+    offset = mapGet(json, 'offset');
+    sites = mapGet(json, 'sites', mapper: (value) {
+      return (value as List).map((e) => Site.fromJson(e)).toList();
+    });
+  }
+}
+
+class Site {
+  int? id;
+  bool? is_updating;
+  String? title;
+  String? url;
+  DateTime? lastUpdate;
+  String? username;
+
+  Site.fromJson(Map<String, dynamic> json) {
+    id = mapGet(json, 'id');
+    is_updating = mapGet(json, 'is_updating');
+    title = mapGet(json, 'title');
+    url = mapGet(json, 'url');
+    username = mapGet(json, 'username');
+    lastUpdate = mapGet(json, 'last_update', mapper: (ts) {
+      return DateTime.fromMillisecondsSinceEpoch(ts * 1000);
+    });
   }
 }
