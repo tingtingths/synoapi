@@ -27,10 +27,9 @@ class Info {
   final QueryAPI _parentApi;
   final APIContext _cntx;
 
-  Info(this._parentApi)
-    : _cntx = _parentApi._cntx;
+  Info(this._parentApi) : _cntx = _parentApi._cntx;
 
-  Future<Response<String>> apiInfoRaw({int version = 1, String query = 'all'}) async {
+  Future<Response<String>> apiInfoRaw({int? version, String query = 'all'}) async {
     final param = {
       'api': Syno.API.Info,
       'version':
@@ -44,9 +43,9 @@ class Info {
     return _cntx.c.getUri(uri);
   }
 
-  Future<APIResponse<Map<String, APIInfoQuery>>> apiInfo({int version = 1, String query = 'all'}) async {
+  Future<APIResponse<Map<String, APIInfoQuery>>> apiInfo({int? version, String query = 'all'}) async {
     return apiInfoRaw(version: version).then((resp) {
-      return APIResponse<Map<String, APIInfoQuery>>.fromJson(jsonDecode(resp.data), (data) {
+      return APIResponse<Map<String, APIInfoQuery>>.fromJson(jsonDecode(resp.data!), (data) {
         var result = <String, APIInfoQuery>{};
         data.forEach((key, value) {
           result[key] = APIInfoQuery.fromJson(value);

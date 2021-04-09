@@ -1,28 +1,34 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:logging/logging.dart';
 
 import 'api/query.dart';
 import 'auth.dart';
 import 'model.dart';
 
 class LoggingInterceptor extends InterceptorsWrapper {
+
+  final l = Logger('SynoAPI');
+
   @override
-  Future onRequest(RequestOptions options) {
-    print('> ${options?.method} ${options?.path}');
-    return super.onRequest(options);
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    l.fine('> ${options.method} ${options.path}');
+    handler.next(options);
   }
 
   @override
-  Future onResponse(Response response) {
-    print('< ${response?.statusCode} ${response?.data}');
-    return super.onResponse(response);
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    l.fine('< ${response.statusCode} ${response.data}');
+    handler.next(response);
   }
 
   @override
-  Future onError(DioError err) {
-    print('ERROR[${err?.response?.statusCode}] => PATH: ${err?.request?.path}');
-    return super.onError(err);
+  void onError(DioError err, ErrorInterceptorHandler handler) {
+    l.fine('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
+    handler.next(err);
   }
 }
 
@@ -34,11 +40,17 @@ class APIContext {
   Map<String, String> _appSid = {};
   Map<String, APIInfoQuery> _apiInfo = {};
 
-  APIContext(String host, {String proto = 'https', int port = 443, String endpoint = ''})
+  APIContext(String host, {String proto = 'https', int port = 443, String endpoint = '', String? proxy, })
       : _proto = proto,
         _authority = '$host:$port',
         _endpoint = endpoint,
-        _client = Dio()..interceptors.add(LoggingInterceptor());
+        _client = Dio()..interceptors.add(LoggingInterceptor()) {
+    if (proxy != null) {
+      (_client.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (httpClient) {
+        httpClient.findProxy = (uri) => proxy;
+      };
+    }
+  }
 
   Uri buildUri(String path, Map<String, String?>? queryParams) {
     if (_proto == 'http') {
@@ -50,20 +62,26 @@ class APIContext {
     }
   }
 
-  Future<bool> authApp(String app, String account, String passwd) async {
-    var resp = await AuthAPIRaw(this).login(account, passwd, app, format: 'sid');
-    var respObj = jsonDecode(resp.data);
+  Future<bool> authApp(String app, String account, String passwd, {String? otpCode, Function? otpCallback}) async {
+    var resp = await AuthAPIRaw(this).login(account, passwd, app, otpCode: otpCode, format: 'sid');
+    var respObj = jsonDecode(resp.data!);
     if (respObj['success']) {
       _appSid[app] = respObj['data']['sid'];
 
-      var apiInfo = await QueryAPI(this).info().apiInfo();
+      var apiInfo = await QueryAPI(this).info.apiInfo();
       if (!apiInfo.success) {
-        throw Exception(
-            'Failed to query api info. error: ' + apiInfo.error.entries.map((e) => '${e.key}=${e.value}').join(','));
+        throw Exception('Failed to query api info. error: ' +
+            (apiInfo.error?.entries.map((e) => '${e.key}=${e.value}').join(',') ?? ''));
       }
-      _apiInfo = apiInfo.data;
+      _apiInfo = apiInfo.data ?? {};
 
       return true;
+    } else {
+      print('authApp(); Authentication fail, code = ${respObj['error']['code']}');
+      if (otpCallback != null && respObj['error']['code'] == 402) { // otp code required
+        print('OTP Code = ${otpCallback()}');
+        return authApp(app, account, passwd, otpCode: otpCallback());
+      }
     }
     return false;
   }
@@ -80,9 +98,7 @@ class APIContext {
 
   Map<String, APIInfoQuery> get apiInfo => _apiInfo;
 
-  int maxApiVersion(String apiName, {int defaultVersion}) =>
-      _apiInfo[apiName] == null ? defaultVersion : _apiInfo[apiName].maxVersion;
+  int maxApiVersion(String apiName, {int defaultVersion = 1}) => _apiInfo[apiName]?.maxVersion ?? defaultVersion;
 
-  int minApiVersion(String apiName, {int defaultVersion}) =>
-      _apiInfo[apiName] == null ? defaultVersion : _apiInfo[apiName].minVersion;
+  int minApiVersion(String apiName, {int defaultVersion = 1}) => _apiInfo[apiName]?.minVersion ?? defaultVersion;
 }
