@@ -35,6 +35,7 @@ class LoggingInterceptor extends InterceptorsWrapper {
 }
 
 class APIContext {
+  final l = Logger('APIContext');
   final String _proto;
   final String _authority;
   final String _endpoint;
@@ -54,9 +55,10 @@ class APIContext {
     }
   }
 
-  Uri buildUri(String path, Map<String, String?>? queryParams) {
+  Uri buildUri(String path, Map<String, dynamic>? queryParams) {
     queryParams ??= {};
     queryParams.removeWhere((key, value) => value == null);
+    queryParams = queryParams.map((key, value) => MapEntry(key, value.toString()));
     if (_proto == 'http') {
       return Uri.http(_authority, _endpoint + path, queryParams);
     } else if (_proto == 'https') {
@@ -71,6 +73,7 @@ class APIContext {
     var respObj = jsonDecode(resp.data!);
     if (respObj['success']) {
       _appSid[app] = respObj['data']['sid'];
+      l.fine('authApp(); App $app authentication success, sid = ${_appSid[app]}');
 
       var apiInfo = await QueryAPI(this).info.apiInfo();
       if (!apiInfo.success) {
@@ -81,9 +84,8 @@ class APIContext {
 
       return true;
     } else {
-      print('authApp(); Authentication fail, code = ${respObj['error']['code']}');
+      l.fine('authApp(); Authentication fail, code = ${respObj['error']['code']}');
       if (otpCallback != null && respObj['error']['code'] == 402) { // otp code required
-        print('OTP Code = ${otpCallback()}');
         return authApp(app, account, passwd, otpCode: otpCallback());
       }
     }

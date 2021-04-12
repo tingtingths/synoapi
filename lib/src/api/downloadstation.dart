@@ -55,7 +55,7 @@ class Info {
   Future<Response<String>> getInfoRaw({int? version}) {
     final param = {
       'api': Syno.DownloadStation.Info,
-      'version': version?.toString() ?? _parentApi._cntx.maxApiVersion(Syno.DownloadStation.Info).toString(),
+      'version': version ?? _parentApi._cntx.maxApiVersion(Syno.DownloadStation.Info),
       'method': 'getinfo',
       '_sid': _parentApi._cntx.appSid[_parentApi.session]
     };
@@ -74,7 +74,7 @@ class Info {
   Future<Response<String>> getConfigRaw({int? version}) {
     final param = {
       'api': Syno.DownloadStation.Info,
-      'version': version?.toString() ?? _parentApi._cntx.maxApiVersion(Syno.DownloadStation.Info).toString(),
+      'version': version ?? _parentApi._cntx.maxApiVersion(Syno.DownloadStation.Info),
       'method': 'getconfig',
       '_sid': _parentApi._cntx.appSid[_parentApi.session]
     };
@@ -93,7 +93,7 @@ class Info {
   Future<Response<String>> setServerConfigRaw(Map<String, String> config, {int? version}) {
     final param = {
       'api': Syno.DownloadStation.Info,
-      'version': version?.toString() ?? _parentApi._cntx.maxApiVersion(Syno.DownloadStation.Info).toString(),
+      'version': version ?? _parentApi._cntx.maxApiVersion(Syno.DownloadStation.Info),
       'method': 'setserverconfig',
       '_sid': _parentApi._cntx.appSid[_parentApi.session]
     };
@@ -120,7 +120,7 @@ class Schedule {
   Future<Response<String>> getConfigRaw({int? version}) {
     final param = {
       'api': Syno.DownloadStation.Schedule,
-      'version': version?.toString() ?? _parentApi._cntx.maxApiVersion(Syno.DownloadStation.Schedule).toString(),
+      'version': version ?? _parentApi._cntx.maxApiVersion(Syno.DownloadStation.Schedule),
       'method': 'getconfig',
       '_sid': _parentApi._cntx.appSid[_parentApi.session]
     };
@@ -138,10 +138,10 @@ class Schedule {
 
   Future<Response<String>> setConfigRaw(bool enabled, bool emuleEnabled, {int? version}) {
     final param = {
-      'enabled': enabled.toString(),
-      'emule_enabled': emuleEnabled.toString(),
+      'enabled': enabled,
+      'emule_enabled': emuleEnabled,
       'api': Syno.DownloadStation.Schedule,
-      'version': version?.toString() ?? _parentApi._cntx.maxApiVersion(Syno.DownloadStation.Schedule).toString(),
+      'version': version ?? _parentApi._cntx.maxApiVersion(Syno.DownloadStation.Schedule),
       'method': 'setconfig',
       '_sid': _parentApi._cntx.appSid[_parentApi.session]
     };
@@ -170,12 +170,12 @@ class Task {
       int limit = -1,
       List<String> additional = const ['detail', 'transfer', 'file', 'tracker', 'peer']}) {
     final param = {
-      'offset': offset.toString(),
-      'limit': limit.toString(),
+      'offset': offset,
+      'limit': limit,
       'additional': additional.join(','),
       // detail, transfer, file, tracker, peer
       'api': Syno.DownloadStation.Task,
-      'version': version?.toString() ?? _cntx.maxApiVersion(Syno.DownloadStation.Task).toString(),
+      'version': version ?? _cntx.maxApiVersion(Syno.DownloadStation.Task),
       'method': 'list',
       '_sid': _cntx.appSid[_parentApi.session]
     };
@@ -203,7 +203,7 @@ class Task {
       'additional': additional.join(','),
       // detail, transfer, file, tracker, peer
       'api': Syno.DownloadStation.Task,
-      'version': version?.toString() ?? _cntx.maxApiVersion(Syno.DownloadStation.Task).toString(),
+      'version': version ?? _cntx.maxApiVersion(Syno.DownloadStation.Task),
       'method': 'getinfo',
       '_sid': _cntx.appSid[_parentApi.session]
     };
@@ -241,7 +241,7 @@ class Task {
       'unzip_password': unzipPasswd,
       'destination': destination,
       'api': Syno.DownloadStation.Task,
-      'version': version?.toString() ?? _cntx.maxApiVersion(Syno.DownloadStation.Task).toString(),
+      'version': version ?? _cntx.maxApiVersion(Syno.DownloadStation.Task),
       'method': 'create',
       '_sid': _cntx.appSid[_parentApi.session]
     };
@@ -290,9 +290,9 @@ class Task {
   Future<Response<String>> deleteRaw(List<String> ids, bool forceComplete, {int? version}) {
     final param = {
       'id': ids.join(','),
-      'force_complete': forceComplete.toString(),
+      'force_complete': forceComplete,
       'api': Syno.DownloadStation.Task,
-      'version': version?.toString() ?? _cntx.maxApiVersion(Syno.DownloadStation.Task).toString(),
+      'version': version ?? _cntx.maxApiVersion(Syno.DownloadStation.Task),
       'method': 'delete',
       '_sid': _cntx.appSid[_parentApi.session]
     };
@@ -313,7 +313,7 @@ class Task {
     final param = {
       'id': ids.join(','),
       'api': Syno.DownloadStation.Task,
-      'version': version?.toString() ?? _cntx.maxApiVersion(Syno.DownloadStation.Task).toString(),
+      'version': version ?? _cntx.maxApiVersion(Syno.DownloadStation.Task),
       'method': 'pause',
       '_sid': _cntx.appSid[_parentApi.session]
     };
@@ -333,7 +333,7 @@ class Task {
     final param = {
       'id': ids.join(','),
       'api': Syno.DownloadStation.Task,
-      'version': version?.toString() ?? _cntx.maxApiVersion(Syno.DownloadStation.Task).toString(),
+      'version': version ?? _cntx.maxApiVersion(Syno.DownloadStation.Task),
       'method': 'resume',
       '_sid': _cntx.appSid[_parentApi.session]
     };
@@ -354,7 +354,7 @@ class Task {
       'id': ids.join(','),
       'destination': destination,
       'api': Syno.DownloadStation.Task,
-      'version': version?.toString() ?? _cntx.maxApiVersion(Syno.DownloadStation.Task).toString(),
+      'version': version ?? _cntx.maxApiVersion(Syno.DownloadStation.Task),
       'method': 'edit',
       '_sid': _cntx.appSid[_parentApi.session]
     };
@@ -382,7 +382,7 @@ class Statistic {
   Future<Response<String>> getInfoRaw({int? version}) {
     final param = {
       'api': Syno.DownloadStation.Statistic,
-      'version': version?.toString() ?? _cntx.maxApiVersion(Syno.DownloadStation.Statistic).toString(),
+      'version': version ?? _cntx.maxApiVersion(Syno.DownloadStation.Statistic),
       'method': 'getinfo',
       '_sid': _cntx.appSid[_parentApi.session]
     };
@@ -435,10 +435,10 @@ class RSSSite {
 
   Future<Response<String>> listRaw({int? offset, int? limit, int? version}) {
     final param = {
-      'offset': offset?.toString(),
-      'limit': limit?.toString(),
+      'offset': offset,
+      'limit': limit,
       'api': Syno.DownloadStation.RSS.Site,
-      'version': version?.toString() ?? _cntx.maxApiVersion(Syno.DownloadStation.RSS.Site).toString(),
+      'version': version ?? _cntx.maxApiVersion(Syno.DownloadStation.RSS.Site),
       'method': 'list',
       '_sid': _cntx.appSid[_parentApi.session]
     };
@@ -458,7 +458,7 @@ class RSSSite {
     final param = {
       'id': ids.join(','),
       'api': Syno.DownloadStation.RSS.Site,
-      'version': version?.toString() ?? _cntx.maxApiVersion(Syno.DownloadStation.RSS.Site).toString(),
+      'version': version ?? _cntx.maxApiVersion(Syno.DownloadStation.RSS.Site),
       'method': 'refresh',
       '_sid': _cntx.appSid[_parentApi.session]
     };
@@ -476,8 +476,29 @@ class RSSSite {
 
 class RSSFeed {
   final RSS _parentApi;
-  final endpoint = '/RSSFeed.cgi';
-  late final _cntx;
+  final endpoint = '/RSSfeed.cgi';
+  late final APIContext _cntx;
 
   RSSFeed(this._parentApi) : _cntx = _parentApi._cntx;
+
+  Future<Response<String>> listRaw(String id, {int? offset, int? limit, int? version}) {
+    final param = {
+      'id': id,
+      'offset': offset,
+      'limit': limit,
+      'api': Syno.DownloadStation.RSS.Feed,
+      'version': version ?? _cntx.maxApiVersion(Syno.DownloadStation.RSS.Feed),
+      'method': 'list',
+      '_sid': _cntx.appSid[_parentApi.session]
+    };
+
+    final uri = _cntx.buildUri(_parentApi.endpoint + endpoint, param);
+    return _cntx.c.getUri(uri);
+  }
+
+  Future<model.APIResponse<model.DownloadStationRSSFeedList>> list(String id, {int? offset, int? limit, int? version}) {
+    return listRaw(id, offset: offset, limit: limit, version: version).then((resp) {
+      return model.APIResponse.fromJson(jsonDecode(resp.data!), (data) => model.DownloadStationRSSFeedList.fromJson(data));
+    });
+  }
 }

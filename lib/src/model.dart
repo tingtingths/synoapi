@@ -423,3 +423,35 @@ class Site {
     });
   }
 }
+
+class DownloadStationRSSFeedList {
+  int total = 0;
+  int offset = 0;
+  List<Feed> feeds = [];
+
+  DownloadStationRSSFeedList.fromJson(Map<String, dynamic> json) {
+    total = mapGet(json, 'total');
+    offset = mapGet(json, 'offset');
+    feeds = mapGet(json, 'feeds', mapper: (value) {
+      return (value as List).map((e) => Feed.fromJson(e)).toList();
+    });
+  }
+}
+
+class Feed {
+  String? title;
+  String? size;
+  DateTime? time;
+  String? downloadUri;
+  String? externalLink;
+
+  Feed.fromJson(Map<String, dynamic> json) {
+    title = mapGet(json, 'title');
+    size = mapGet(json, 'size');
+    time = mapGet(json, 'time', mapper: (ts) {
+      return DateTime.fromMillisecondsSinceEpoch(ts * 1000);
+    });
+    downloadUri = mapGet(json, 'download_uri');
+    externalLink = mapGet(json, 'external_link');
+  }
+}

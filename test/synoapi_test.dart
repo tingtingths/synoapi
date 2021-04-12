@@ -25,7 +25,7 @@ void main() {
   });
 
   group('Test Query API', () {
-    test('Test Query Result', () async {
+    test('Test API Info Query Result', () async {
       final resp = await queryApi.info.apiInfo();
       var apiQueryResult = resp.data;
       expect(apiQueryResult, isNotEmpty);
@@ -40,7 +40,7 @@ void main() {
       expect(versionStr, isNotEmpty);
     });
 
-    test('Test Get Tasks', () async {
+    test('Test List Tasks', () async {
       final resp = await dsApi.task.list();
       final tasks = resp.data!.tasks;
       tasks.forEach((task) {
@@ -49,13 +49,18 @@ void main() {
       expect(tasks, isNotNull);
     });
 
-    test('Test Get RSS Sites', () async {
+    test('Test List RSS Sites', () async {
       final resp = await dsApi.rss.site.list();
       expect(resp, isNotNull);
       expect(resp.success, isTrue);
       resp.data!.sites.forEach((site) {
         l.info('${site.title} - ${site.url}');
       });
+    });
+
+    test('Test List RSS Feeds', () async {
+      final resp = await dsApi.rss.feed.list("0");
+      expect(resp, isNotNull);
     });
   });
 }
