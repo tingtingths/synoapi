@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
 
 import 'api/query.dart';
-import 'auth.dart';
+import 'api/auth.dart';
 import 'model.dart';
 
 class LoggingInterceptor extends InterceptorsWrapper {
