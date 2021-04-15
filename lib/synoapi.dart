@@ -8,3 +8,4 @@ export 'src/api/query.dart' hide Info;
 export 'src/api/auth.dart';
 export 'src/const.dart';
 export 'src/context.dart';
+export 'src/model.dart';
