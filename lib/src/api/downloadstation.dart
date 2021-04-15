@@ -21,12 +21,14 @@ class DownloadStationAPI {
   late final Schedule _schedule;
   late final Task _task;
   late final RSS _rss;
+  late final Statistic _statistic;
 
   DownloadStationAPI(this._cntx) {
     _info = Info(this);
     _schedule = Schedule(this);
     _task = Task(this);
     _rss = RSS(this);
+    _statistic = Statistic(this);
   }
 
   Info get info {
@@ -43,6 +45,10 @@ class DownloadStationAPI {
 
   RSS get rss {
     return _rss;
+  }
+
+  Statistic get statistic {
+    return _statistic;
   }
 }
 
@@ -391,7 +397,7 @@ class Statistic {
     return _cntx.c.getUri(uri);
   }
 
-  Future<model.APIResponse<model.DownloadStationStatisticGetInfo>> statGetInfo({int? version}) {
+  Future<model.APIResponse<model.DownloadStationStatisticGetInfo>> getInfo({int? version}) {
     return getInfoRaw(version: version).then((resp) {
       return model.APIResponse.fromJson(
           jsonDecode(resp.data!), (json) => model.DownloadStationStatisticGetInfo.fromJson(json));
