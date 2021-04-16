@@ -5,7 +5,12 @@ import 'package:test/test.dart';
 import 'config.dart';
 
 void main() {
-  Logger.root.level = Level.FINE;
+  String? test;
+  if (test == null || test.trim() == '') {
+    return;
+  }
+
+  Logger.root.level = Level.FINEEST;
   Logger.root.onRecord.listen((l) {
     print('${l.time} ${l.level} ${l.loggerName} | ${l.message}${l.error ?? ''}${l.stackTrace ?? ''}');
   });

@@ -75,12 +75,16 @@ class APIContext {
       _appSid[app] = respObj['data']['sid'];
       l.fine('authApp(); App $app authentication success, sid = ${_appSid[app]}');
 
-      var apiInfo = await QueryAPI(this).info.apiInfo();
-      if (!apiInfo.success) {
-        throw Exception('Failed to query api info. error: ' +
-            (apiInfo.error?.entries.map((e) => '${e.key}=${e.value}').join(',') ?? ''));
+      try {
+        var apiInfo = await QueryAPI(this).info.apiInfo();
+        if (!apiInfo.success) {
+          throw Exception('Failed to query api info. error: ' +
+              (apiInfo.error?.entries.map((e) => '${e.key}=${e.value}').join(',') ?? ''));
+        }
+        _apiInfo = apiInfo.data ?? {};
+      } catch (e) {
+        l.warning('authApp(); Failed to retrieve API info.');
       }
-      _apiInfo = apiInfo.data ?? {};
 
       return true;
     } else {
