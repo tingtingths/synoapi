@@ -183,7 +183,7 @@ class ListTaskInfo {
     offset = mapGet(json, 'offset');
 
     tasks = mapGet(json, 'tasks', mapper: (List<dynamic> tasksJson) {
-      return tasksJson.map((e) => Task.fromJson(jsonDecode(e))).toList();
+      return tasksJson.map((map) => Task.fromJson(map)).toList();
     });
   }
 }
