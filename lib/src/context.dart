@@ -16,14 +16,14 @@ class LoggingInterceptor extends InterceptorsWrapper {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    l.fine('> ${options.method} ${options.path}');
+    l.finest('> ${options.method} ${options.path}');
     handler.next(options);
   }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     final data = response.data.toString();
-    l.fine('< ${response.statusCode} ${data.substring(0, min(data.length, 256))}');
+    l.finest('< ${response.statusCode} ${data.substring(0, min(data.length, 256))}');
     handler.next(response);
   }
 
