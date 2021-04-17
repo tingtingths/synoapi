@@ -504,7 +504,8 @@ class RSSFeed {
 
   Future<model.APIResponse<model.DownloadStationRSSFeedList>> list(String id, {int? offset, int? limit, int? version}) {
     return listRaw(id, offset: offset, limit: limit, version: version).then((resp) {
-      return model.APIResponse.fromJson(jsonDecode(resp.data!), (data) => model.DownloadStationRSSFeedList.fromJson(data));
+      return model.APIResponse.fromJson(
+          jsonDecode(resp.data!), (data) => model.DownloadStationRSSFeedList.fromJson(data));
     });
   }
 }
