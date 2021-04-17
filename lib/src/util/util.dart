@@ -4,7 +4,7 @@ V? mapGet<K, V>(Map<K, dynamic>? dict, K key, {otherwise, Function? mapper, Func
   }
 
   if (ifPresent != null) {
-    ifPresent(dict[key]);
+    ifPresent(dict[key]!);
   }
 
   if (mapper != null) return mapper(dict[key]);

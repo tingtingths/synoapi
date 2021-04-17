@@ -256,9 +256,14 @@ class Additional {
   List<TaskTracker>? tracker;
   List<TaskPeer>? peer;
 
-  Additional.fromJson(Map<String, dynamic> json) {
-    detail = TaskDetail.fromJson(mapGet(json, 'detail'));
-    transfer = TaskTransfer.fromJson(mapGet(json, 'transfer'));
+  Additional.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return;
+    mapGet(json, 'detail', ifPresent: (Map<String, dynamic> _json) {
+      detail = TaskDetail.fromJson(_json);
+    });
+    mapGet(json, 'transfer', ifPresent: (Map<String, dynamic> _json) {
+      transfer = TaskTransfer.fromJson(_json);
+    });
     file = mapGet(json, 'file', mapper: (value) {
       return (value as List).map((e) => TaskFile.fromJson(e)).toList();
     });
@@ -275,7 +280,8 @@ class StatusExtra {
   String? errorDetail;
   int? unzipProgress;
 
-  StatusExtra.fromJson(Map<String, dynamic> json) {
+  StatusExtra.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return;
     errorDetail = mapGet(json, 'error_detail');
     unzipProgress = mapGet(json, 'unzip_progress');
   }
