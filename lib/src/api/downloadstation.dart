@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
@@ -235,7 +234,7 @@ class Task {
   Future<Response<String>> createRaw(
       {int? version,
       List<String>? uris,
-      File? file,
+      List<int>? torrentBytes,
       String? username,
       String? passwd,
       String? unzipPasswd,
@@ -256,13 +255,10 @@ class Task {
     final uri = _cntx.buildUri(_parentApi.endpoint + endpoint, null);
 
     dynamic data = FormData.fromMap(param);
-    if (file != null && !file.existsSync()) {
-      throw Exception('File not found');
-    }
 
     var options;
-    if (file != null) {
-      data.files.add(MapEntry('file', await MultipartFile.fromFile(file.path)));
+    if (torrentBytes != null) {
+      data.files.add(MapEntry('file', MultipartFile.fromBytes(torrentBytes)));
     } else {
       // if not using file, send as x-www-form-urlencoded
       data = param;
@@ -275,7 +271,7 @@ class Task {
   Future<model.APIResponse<void>> create(
       {int? version,
       List<String>? uris,
-      File? file,
+      List<int>? torrentBytes,
       String? username,
       String? passwd,
       String? unzipPasswd,
@@ -283,7 +279,7 @@ class Task {
     return createRaw(
             version: version,
             uris: uris,
-            file: file,
+            torrentBytes: torrentBytes,
             username: username,
             passwd: passwd,
             unzipPasswd: unzipPasswd,
