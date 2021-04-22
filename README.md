@@ -1,22 +1,35 @@
-A library for Dart developers.
+# SynoAPI
 
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+Fully modeled Synology API client in dart.
 
 ## Usage
 
-A simple usage example:
+Get and create tasks on Download Station.
 
 ```dart
 import 'package:synoapi/synoapi.dart';
 
-main() {
-  var awesome = new Awesome();
+main() async {
+  var context = api.APIContext('myds.com', port: 5000);
+  var dsApi = api.DownloadStationAPI(context);
+
+  var authOk = await context.authApp(api.Syno.DownloadStation.name, 'user', 'password');
+
+  // list tasks from Download Station
+  dsApi.task.list().then((response) {
+    var tasks = response.data?.tasks ?? [];
+    tasks.forEach((task) {
+      print('Task: ${task.title}');
+    });
+  });
+  
+  // create task from magnet uri
+  dsApi.task.create(uris: ['magnet://abcdefg']).then((response) {
+    print('Task creation ${response.success ? 'success' : 'failed'}');
+  });
 }
 ```
 
-## Features and bugs
+## Limitations
 
-Please file feature requests and bugs at the [issue tracker][tracker].
-
-[tracker]: http://example.com/issues/replaceme
+- Only Download Station API provided currently.
