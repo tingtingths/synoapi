@@ -1,17 +1,17 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
 
-import 'api/query.dart';
 import 'api/auth.dart';
+import 'api/query.dart';
 import 'model.dart';
 
-class LoggingInterceptor extends InterceptorsWrapper {
+typedef AsyncStringCallback = Future<String> Function();
 
+class LoggingInterceptor extends InterceptorsWrapper {
   final l = Logger('SynoAPI');
 
   @override
@@ -36,23 +36,37 @@ class LoggingInterceptor extends InterceptorsWrapper {
 
 class APIContext {
   final l = Logger('APIContext');
-  final String _proto;
-  final String _authority;
-  final String _endpoint;
-  final Dio _client;
-  Map<String, String> _appSid = {};
+  late final String _proto;
+  late final String _authority;
+  late final String _endpoint;
+  late final Dio _client;
+  Map<String, String> _appSid;
   Map<String, APIInfoQuery> _apiInfo = {};
 
-  APIContext(String host, {String proto = 'https', int port = 443, String endpoint = '', String? proxy, })
+  APIContext(String host,
+      {String proto = 'https', int port = 443, String endpoint = '', String? proxy, Map<String, String>? sid})
       : _proto = proto,
         _authority = '$host:$port',
         _endpoint = endpoint,
-        _client = Dio()..interceptors.add(LoggingInterceptor()) {
-    if (proxy != null) {
-      (_client.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (httpClient) {
-        httpClient.findProxy = (uri) => proxy;
-      };
-    }
+        _client = Dio()..interceptors.add(LoggingInterceptor()),
+        _appSid = sid ?? {} {
+    if (proxy != null) _setupProxy(proxy);
+  }
+
+  APIContext.uri(String uri, {String? proxy, Map<String, String>? sid})
+      : _client = Dio()..interceptors.add(LoggingInterceptor()),
+        _appSid = sid ?? {} {
+    var parsedUri = Uri.parse(uri);
+    _proto = parsedUri.scheme;
+    _authority = parsedUri.authority;
+    _endpoint = parsedUri.path;
+    if (proxy != null) _setupProxy(proxy);
+  }
+
+  void _setupProxy(String proxy) {
+    (_client.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (httpClient) {
+      httpClient.findProxy = (uri) => proxy;
+    };
   }
 
   Uri buildUri(String path, Map<String, dynamic>? queryParams) {
@@ -68,7 +82,8 @@ class APIContext {
     }
   }
 
-  Future<bool> authApp(String app, String account, String passwd, {String? otpCode, Function? otpCallback}) async {
+  Future<bool> authApp(String app, String account, String passwd,
+      {String? otpCode, AsyncStringCallback? otpCallback}) async {
     var resp = await AuthAPIRaw(this).login(account, passwd, app, otpCode: otpCode, format: 'sid');
     var respObj = jsonDecode(resp.data!);
     if (respObj['success']) {
@@ -89,8 +104,9 @@ class APIContext {
       return true;
     } else {
       l.fine('authApp(); Authentication fail, code = ${respObj['error']['code']}');
-      if (otpCallback != null && respObj['error']['code'] == 402) { // otp code required
-        return authApp(app, account, passwd, otpCode: otpCallback());
+      if (otpCallback != null && respObj['error']['code'] == 402) {
+        // otp code required
+        return authApp(app, account, passwd, otpCode: await otpCallback());
       }
     }
     return false;
@@ -107,6 +123,14 @@ class APIContext {
   Dio get c => _client;
 
   Map<String, APIInfoQuery> get apiInfo => _apiInfo;
+
+  bool hasSid(String appName) {
+    return (_appSid[appName] ?? '').isNotEmpty;
+  }
+
+  String? getSid(String appName) {
+    return _appSid[appName];
+  }
 
   int maxApiVersion(String apiName, {int defaultVersion = 1}) => _apiInfo[apiName]?.maxVersion ?? defaultVersion;
 
