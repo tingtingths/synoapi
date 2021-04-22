@@ -12,5 +12,7 @@ build/
 # Directory created by dartdoc
 doc/api/
 
+test/config.dart
+
 # IDE
 .idea/
