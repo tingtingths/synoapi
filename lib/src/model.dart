@@ -1,3 +1,7 @@
+/*
+API response model.
+run 'dart run build_runner build' to generate json class.
+ */
 import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
@@ -76,7 +80,9 @@ class APIInfoQuery {
 @JsonSerializable()
 class DownloadStationInfoGetInfo {
   int? version;
+  @JsonKey(name: 'version_string')
   String? versionString;
+  @JsonKey(name: 'is_manager')
   bool? isManager;
 
   DownloadStationInfoGetInfo(this.version, this.versionString, this.isManager);
@@ -88,16 +94,27 @@ class DownloadStationInfoGetInfo {
 
 @JsonSerializable()
 class DownloadStationInfoGetConfig {
+  @JsonKey(name: 'bt_max_download')
   int? btMaxDownload;
+  @JsonKey(name: 'bt_max_upload')
   int? btMaxUpload;
+  @JsonKey(name: 'emule_max_download')
   int? emuleMaxDownload;
+  @JsonKey(name: 'emule_max_upload')
   int? emuleMaxUpload;
+  @JsonKey(name: 'nzb_max_download')
   int? nzbMaxDownload;
+  @JsonKey(name: 'http_max_download')
   int? httpMaxDownload;
+  @JsonKey(name: 'ftp_max_download')
   int? ftpMaxDownload;
+  @JsonKey(name: 'emule_enabled')
   bool? emuleEnabled;
+  @JsonKey(name: 'unzip_service_enabled')
   bool? unzipServiceEnabled;
+  @JsonKey(name: 'default_destination')
   String? defaultDestination;
+  @JsonKey(name: 'emule_default_destination')
   String? emuleDefaultDestination;
 
   DownloadStationInfoGetConfig(
@@ -122,6 +139,7 @@ class DownloadStationInfoGetConfig {
 @JsonSerializable()
 class DownloadStationScheduleGetConfig {
   bool? enabled;
+  @JsonKey(name: 'emule_enabled')
   bool? emuleEnabled;
 
   DownloadStationScheduleGetConfig(this.enabled, this.emuleEnabled);
@@ -134,9 +152,13 @@ class DownloadStationScheduleGetConfig {
 
 @JsonSerializable()
 class DownloadStationStatisticGetInfo {
+  @JsonKey(name: 'speed_download')
   int? speedDownload;
+  @JsonKey(name: 'speed_upload')
   int? speedUpload;
+  @JsonKey(name: 'emule_speed_download')
   int? emuleSpeedDownload;
+  @JsonKey(name: 'emule_speed_upload')
   int? emuleSpeedUpload;
 
   DownloadStationStatisticGetInfo(this.speedDownload, this.speedUpload, this.emuleSpeedDownload, this.emuleSpeedUpload);
@@ -228,6 +250,7 @@ class Task {
   String? title;
   int? size;
   String? _status;
+  @JsonKey(name: 'status_extra')
   StatusExtra? statusExtra;
   Additional? additional;
 
@@ -295,7 +318,9 @@ class Additional {
 
 @JsonSerializable()
 class StatusExtra {
+  @JsonKey(name: 'error_detail')
   String? errorDetail;
+  @JsonKey(name: 'unzip_progress')
   int? unzipProgress;
 
   StatusExtra(this.errorDetail, this.unzipProgress);
@@ -310,17 +335,28 @@ class StatusExtra {
 class TaskDetail {
   String? destination;
   String? uri;
+  @JsonKey(name: 'create_time')
   DateTime? createTime;
+  @JsonKey(name: 'started_time')
   DateTime? startedTime;
+  @JsonKey(name: 'completed_time')
   DateTime? completedTime;
   String? priority;
+  @JsonKey(name: 'total_peers')
   int? totalPeers;
+  @JsonKey(name: 'connected_seeders')
   int? connectedSeeders;
+  @JsonKey(name: 'connected_leechers')
   int? connectedLeechers;
+  @JsonKey(name: 'connected_peers')
   int? connectedPeers;
+  @JsonKey(name: 'seedelapsed')
   int? seedElapsed;
+  @JsonKey(name: 'unzip_password')
   String? unzipPassword;
+  @JsonKey(name: 'waiting_seconds')
   int? waitingSeconds;
+  @JsonKey(name: 'total_pieces')
   int? totalPieces;
 
   TaskDetail(
@@ -346,10 +382,15 @@ class TaskDetail {
 
 @JsonSerializable()
 class TaskTransfer {
+  @JsonKey(name: 'downloaded_pieces')
   int? downloadedPieces;
+  @JsonKey(name: 'size_downloaded')
   int? sizeDownloaded;
+  @JsonKey(name: 'size_uploaded')
   int? sizeUploaded;
+  @JsonKey(name: 'speed_download')
   int? speedDownload;
+  @JsonKey(name: 'speed_upload')
   int? speedUpload;
 
   TaskTransfer(this.downloadedPieces, this.sizeDownloaded, this.sizeUploaded, this.speedDownload, this.speedUpload);
@@ -364,6 +405,7 @@ class TaskFile {
   String? filename;
   int? index;
   int? size;
+  @JsonKey(name: 'size_downloaded')
   int? sizeDownloaded;
   String? priority;
   bool? wanted;
@@ -379,6 +421,7 @@ class TaskFile {
 class TaskTracker {
   String? url;
   String? status;
+  @JsonKey(name: 'update_timer')
   int? updateTimer;
   int? seeds;
   int? peers;
@@ -395,7 +438,9 @@ class TaskPeer {
   String? address;
   String? agent;
   num? progress;
+  @JsonKey(name: 'speed_download')
   int? speedDownload;
+  @JsonKey(name: 'speed_upload')
   int? speedUpload;
 
   TaskPeer(this.address, this.agent, this.progress, this.speedDownload, this.speedUpload);
@@ -422,13 +467,15 @@ class DownloadStationRSSSiteList {
 @DateTimeEpochConverter()
 class Site {
   int? id;
-  bool? is_updating;
+  @JsonKey(name: 'is_updating')
+  bool? isUpdating;
   String? title;
   String? url;
+  @JsonKey(name: 'last_update')
   DateTime? lastUpdate;
   String? username;
 
-  Site(this.id, this.is_updating, this.title, this.url, this.lastUpdate, this.username);
+  Site(this.id, this.isUpdating, this.title, this.url, this.lastUpdate, this.username);
 
   factory Site.fromJson(Map<String, dynamic> json) => _$SiteFromJson(json);
 
@@ -454,7 +501,9 @@ class Feed {
   String? title;
   String? size;
   DateTime? time;
+  @JsonKey(name: 'download_uri')
   String? downloadUri;
+  @JsonKey(name: 'external_link')
   String? externalLink;
 
   Feed(this.title, this.size, this.time, this.downloadUri, this.externalLink);

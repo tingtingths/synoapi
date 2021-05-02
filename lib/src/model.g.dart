@@ -27,8 +27,8 @@ DownloadStationInfoGetInfo _$DownloadStationInfoGetInfoFromJson(
     Map<String, dynamic> json) {
   return DownloadStationInfoGetInfo(
     json['version'] as int?,
-    json['versionString'] as String?,
-    json['isManager'] as bool?,
+    json['version_string'] as String?,
+    json['is_manager'] as bool?,
   );
 }
 
@@ -36,48 +36,48 @@ Map<String, dynamic> _$DownloadStationInfoGetInfoToJson(
         DownloadStationInfoGetInfo instance) =>
     <String, dynamic>{
       'version': instance.version,
-      'versionString': instance.versionString,
-      'isManager': instance.isManager,
+      'version_string': instance.versionString,
+      'is_manager': instance.isManager,
     };
 
 DownloadStationInfoGetConfig _$DownloadStationInfoGetConfigFromJson(
     Map<String, dynamic> json) {
   return DownloadStationInfoGetConfig(
-    json['btMaxDownload'] as int?,
-    json['btMaxUpload'] as int?,
-    json['emuleMaxDownload'] as int?,
-    json['emuleMaxUpload'] as int?,
-    json['nzbMaxDownload'] as int?,
-    json['httpMaxDownload'] as int?,
-    json['ftpMaxDownload'] as int?,
-    json['emuleEnabled'] as bool?,
-    json['unzipServiceEnabled'] as bool?,
-    json['defaultDestination'] as String?,
-    json['emuleDefaultDestination'] as String?,
+    json['bt_max_download'] as int?,
+    json['bt_max_upload'] as int?,
+    json['emule_max_download'] as int?,
+    json['emule_max_upload'] as int?,
+    json['nzb_max_download'] as int?,
+    json['http_max_download'] as int?,
+    json['ftp_max_download'] as int?,
+    json['emule_enabled'] as bool?,
+    json['unzip_service_enabled'] as bool?,
+    json['default_destination'] as String?,
+    json['emule_default_destination'] as String?,
   );
 }
 
 Map<String, dynamic> _$DownloadStationInfoGetConfigToJson(
         DownloadStationInfoGetConfig instance) =>
     <String, dynamic>{
-      'btMaxDownload': instance.btMaxDownload,
-      'btMaxUpload': instance.btMaxUpload,
-      'emuleMaxDownload': instance.emuleMaxDownload,
-      'emuleMaxUpload': instance.emuleMaxUpload,
-      'nzbMaxDownload': instance.nzbMaxDownload,
-      'httpMaxDownload': instance.httpMaxDownload,
-      'ftpMaxDownload': instance.ftpMaxDownload,
-      'emuleEnabled': instance.emuleEnabled,
-      'unzipServiceEnabled': instance.unzipServiceEnabled,
-      'defaultDestination': instance.defaultDestination,
-      'emuleDefaultDestination': instance.emuleDefaultDestination,
+      'bt_max_download': instance.btMaxDownload,
+      'bt_max_upload': instance.btMaxUpload,
+      'emule_max_download': instance.emuleMaxDownload,
+      'emule_max_upload': instance.emuleMaxUpload,
+      'nzb_max_download': instance.nzbMaxDownload,
+      'http_max_download': instance.httpMaxDownload,
+      'ftp_max_download': instance.ftpMaxDownload,
+      'emule_enabled': instance.emuleEnabled,
+      'unzip_service_enabled': instance.unzipServiceEnabled,
+      'default_destination': instance.defaultDestination,
+      'emule_default_destination': instance.emuleDefaultDestination,
     };
 
 DownloadStationScheduleGetConfig _$DownloadStationScheduleGetConfigFromJson(
     Map<String, dynamic> json) {
   return DownloadStationScheduleGetConfig(
     json['enabled'] as bool?,
-    json['emuleEnabled'] as bool?,
+    json['emule_enabled'] as bool?,
   );
 }
 
@@ -85,26 +85,26 @@ Map<String, dynamic> _$DownloadStationScheduleGetConfigToJson(
         DownloadStationScheduleGetConfig instance) =>
     <String, dynamic>{
       'enabled': instance.enabled,
-      'emuleEnabled': instance.emuleEnabled,
+      'emule_enabled': instance.emuleEnabled,
     };
 
 DownloadStationStatisticGetInfo _$DownloadStationStatisticGetInfoFromJson(
     Map<String, dynamic> json) {
   return DownloadStationStatisticGetInfo(
-    json['speedDownload'] as int?,
-    json['speedUpload'] as int?,
-    json['emuleSpeedDownload'] as int?,
-    json['emuleSpeedUpload'] as int?,
+    json['speed_download'] as int?,
+    json['speed_upload'] as int?,
+    json['emule_speed_download'] as int?,
+    json['emule_speed_upload'] as int?,
   );
 }
 
 Map<String, dynamic> _$DownloadStationStatisticGetInfoToJson(
         DownloadStationStatisticGetInfo instance) =>
     <String, dynamic>{
-      'speedDownload': instance.speedDownload,
-      'speedUpload': instance.speedUpload,
-      'emuleSpeedDownload': instance.emuleSpeedDownload,
-      'emuleSpeedUpload': instance.emuleSpeedUpload,
+      'speed_download': instance.speedDownload,
+      'speed_upload': instance.speedUpload,
+      'emule_speed_download': instance.emuleSpeedDownload,
+      'emule_speed_upload': instance.emuleSpeedUpload,
     };
 
 _DownloadStationTaskActionResponse _$_DownloadStationTaskActionResponseFromJson(
@@ -147,9 +147,9 @@ Task _$TaskFromJson(Map<String, dynamic> json) {
     json['title'] as String?,
     json['size'] as int?,
     _$enumDecodeNullable(_$TaskStatusEnumMap, json['status']),
-    json['statusExtra'] == null
+    json['status_extra'] == null
         ? null
-        : StatusExtra.fromJson(json['statusExtra'] as Map<String, dynamic>),
+        : StatusExtra.fromJson(json['status_extra'] as Map<String, dynamic>),
     json['additional'] == null
         ? null
         : Additional.fromJson(json['additional'] as Map<String, dynamic>),
@@ -162,7 +162,7 @@ Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
       'username': instance.username,
       'title': instance.title,
       'size': instance.size,
-      'statusExtra': instance.statusExtra,
+      'status_extra': instance.statusExtra,
       'additional': instance.additional,
       'status': _$TaskStatusEnumMap[instance.status],
     };
@@ -248,39 +248,33 @@ Map<String, dynamic> _$AdditionalToJson(Additional instance) =>
 
 StatusExtra _$StatusExtraFromJson(Map<String, dynamic> json) {
   return StatusExtra(
-    json['errorDetail'] as String?,
-    json['unzipProgress'] as int?,
+    json['error_detail'] as String?,
+    json['unzip_progress'] as int?,
   );
 }
 
 Map<String, dynamic> _$StatusExtraToJson(StatusExtra instance) =>
     <String, dynamic>{
-      'errorDetail': instance.errorDetail,
-      'unzipProgress': instance.unzipProgress,
+      'error_detail': instance.errorDetail,
+      'unzip_progress': instance.unzipProgress,
     };
 
 TaskDetail _$TaskDetailFromJson(Map<String, dynamic> json) {
   return TaskDetail(
     json['destination'] as String?,
     json['uri'] as String?,
-    json['createTime'] == null
-        ? null
-        : DateTime.parse(json['createTime'] as String),
-    json['startedTime'] == null
-        ? null
-        : DateTime.parse(json['startedTime'] as String),
-    json['completedTime'] == null
-        ? null
-        : DateTime.parse(json['completedTime'] as String),
+    const DateTimeEpochConverter().fromJson(json['create_time'] as int?),
+    const DateTimeEpochConverter().fromJson(json['started_time'] as int?),
+    const DateTimeEpochConverter().fromJson(json['completed_time'] as int?),
     json['priority'] as String?,
-    json['totalPeers'] as int?,
-    json['connectedSeeders'] as int?,
-    json['connectedLeechers'] as int?,
-    json['connectedPeers'] as int?,
-    json['seedElapsed'] as int?,
-    json['unzipPassword'] as String?,
-    json['waitingSeconds'] as int?,
-    json['totalPieces'] as int?,
+    json['total_peers'] as int?,
+    json['connected_seeders'] as int?,
+    json['connected_leechers'] as int?,
+    json['connected_peers'] as int?,
+    json['seedelapsed'] as int?,
+    json['unzip_password'] as String?,
+    json['waiting_seconds'] as int?,
+    json['total_pieces'] as int?,
   );
 }
 
@@ -288,37 +282,39 @@ Map<String, dynamic> _$TaskDetailToJson(TaskDetail instance) =>
     <String, dynamic>{
       'destination': instance.destination,
       'uri': instance.uri,
-      'createTime': instance.createTime?.toIso8601String(),
-      'startedTime': instance.startedTime?.toIso8601String(),
-      'completedTime': instance.completedTime?.toIso8601String(),
+      'create_time': const DateTimeEpochConverter().toJson(instance.createTime),
+      'started_time':
+          const DateTimeEpochConverter().toJson(instance.startedTime),
+      'completed_time':
+          const DateTimeEpochConverter().toJson(instance.completedTime),
       'priority': instance.priority,
-      'totalPeers': instance.totalPeers,
-      'connectedSeeders': instance.connectedSeeders,
-      'connectedLeechers': instance.connectedLeechers,
-      'connectedPeers': instance.connectedPeers,
-      'seedElapsed': instance.seedElapsed,
-      'unzipPassword': instance.unzipPassword,
-      'waitingSeconds': instance.waitingSeconds,
-      'totalPieces': instance.totalPieces,
+      'total_peers': instance.totalPeers,
+      'connected_seeders': instance.connectedSeeders,
+      'connected_leechers': instance.connectedLeechers,
+      'connected_peers': instance.connectedPeers,
+      'seedelapsed': instance.seedElapsed,
+      'unzip_password': instance.unzipPassword,
+      'waiting_seconds': instance.waitingSeconds,
+      'total_pieces': instance.totalPieces,
     };
 
 TaskTransfer _$TaskTransferFromJson(Map<String, dynamic> json) {
   return TaskTransfer(
-    json['downloadedPieces'] as int?,
-    json['sizeDownloaded'] as int?,
-    json['sizeUploaded'] as int?,
-    json['speedDownload'] as int?,
-    json['speedUpload'] as int?,
+    json['downloaded_pieces'] as int?,
+    json['size_downloaded'] as int?,
+    json['size_uploaded'] as int?,
+    json['speed_download'] as int?,
+    json['speed_upload'] as int?,
   );
 }
 
 Map<String, dynamic> _$TaskTransferToJson(TaskTransfer instance) =>
     <String, dynamic>{
-      'downloadedPieces': instance.downloadedPieces,
-      'sizeDownloaded': instance.sizeDownloaded,
-      'sizeUploaded': instance.sizeUploaded,
-      'speedDownload': instance.speedDownload,
-      'speedUpload': instance.speedUpload,
+      'downloaded_pieces': instance.downloadedPieces,
+      'size_downloaded': instance.sizeDownloaded,
+      'size_uploaded': instance.sizeUploaded,
+      'speed_download': instance.speedDownload,
+      'speed_upload': instance.speedUpload,
     };
 
 TaskFile _$TaskFileFromJson(Map<String, dynamic> json) {
@@ -326,7 +322,7 @@ TaskFile _$TaskFileFromJson(Map<String, dynamic> json) {
     json['filename'] as String?,
     json['index'] as int?,
     json['size'] as int?,
-    json['sizeDownloaded'] as int?,
+    json['size_downloaded'] as int?,
     json['priority'] as String?,
     json['wanted'] as bool?,
   );
@@ -336,7 +332,7 @@ Map<String, dynamic> _$TaskFileToJson(TaskFile instance) => <String, dynamic>{
       'filename': instance.filename,
       'index': instance.index,
       'size': instance.size,
-      'sizeDownloaded': instance.sizeDownloaded,
+      'size_downloaded': instance.sizeDownloaded,
       'priority': instance.priority,
       'wanted': instance.wanted,
     };
@@ -345,7 +341,7 @@ TaskTracker _$TaskTrackerFromJson(Map<String, dynamic> json) {
   return TaskTracker(
     json['url'] as String?,
     json['status'] as String?,
-    json['updateTimer'] as int?,
+    json['update_timer'] as int?,
     json['seeds'] as int?,
     json['peers'] as int?,
   );
@@ -355,7 +351,7 @@ Map<String, dynamic> _$TaskTrackerToJson(TaskTracker instance) =>
     <String, dynamic>{
       'url': instance.url,
       'status': instance.status,
-      'updateTimer': instance.updateTimer,
+      'update_timer': instance.updateTimer,
       'seeds': instance.seeds,
       'peers': instance.peers,
     };
@@ -365,8 +361,8 @@ TaskPeer _$TaskPeerFromJson(Map<String, dynamic> json) {
     json['address'] as String?,
     json['agent'] as String?,
     json['progress'] as num?,
-    json['speedDownload'] as int?,
-    json['speedUpload'] as int?,
+    json['speed_download'] as int?,
+    json['speed_upload'] as int?,
   );
 }
 
@@ -374,8 +370,8 @@ Map<String, dynamic> _$TaskPeerToJson(TaskPeer instance) => <String, dynamic>{
       'address': instance.address,
       'agent': instance.agent,
       'progress': instance.progress,
-      'speedDownload': instance.speedDownload,
-      'speedUpload': instance.speedUpload,
+      'speed_download': instance.speedDownload,
+      'speed_upload': instance.speedUpload,
     };
 
 DownloadStationRSSSiteList _$DownloadStationRSSSiteListFromJson(
@@ -403,19 +399,17 @@ Site _$SiteFromJson(Map<String, dynamic> json) {
     json['is_updating'] as bool?,
     json['title'] as String?,
     json['url'] as String?,
-    json['lastUpdate'] == null
-        ? null
-        : DateTime.parse(json['lastUpdate'] as String),
+    const DateTimeEpochConverter().fromJson(json['last_update'] as int?),
     json['username'] as String?,
   );
 }
 
 Map<String, dynamic> _$SiteToJson(Site instance) => <String, dynamic>{
       'id': instance.id,
-      'is_updating': instance.is_updating,
+      'is_updating': instance.isUpdating,
       'title': instance.title,
       'url': instance.url,
-      'lastUpdate': instance.lastUpdate?.toIso8601String(),
+      'last_update': const DateTimeEpochConverter().toJson(instance.lastUpdate),
       'username': instance.username,
     };
 
@@ -442,16 +436,16 @@ Feed _$FeedFromJson(Map<String, dynamic> json) {
   return Feed(
     json['title'] as String?,
     json['size'] as String?,
-    json['time'] == null ? null : DateTime.parse(json['time'] as String),
-    json['downloadUri'] as String?,
-    json['externalLink'] as String?,
+    const DateTimeEpochConverter().fromJson(json['time'] as int?),
+    json['download_uri'] as String?,
+    json['external_link'] as String?,
   );
 }
 
 Map<String, dynamic> _$FeedToJson(Feed instance) => <String, dynamic>{
       'title': instance.title,
       'size': instance.size,
-      'time': instance.time?.toIso8601String(),
-      'downloadUri': instance.downloadUri,
-      'externalLink': instance.externalLink,
+      'time': const DateTimeEpochConverter().toJson(instance.time),
+      'download_uri': instance.downloadUri,
+      'external_link': instance.externalLink,
     };

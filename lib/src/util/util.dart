@@ -13,16 +13,16 @@ V? mapGet<K, V>(Map<K, dynamic>? dict, K key, {otherwise, Function? mapper, Func
   return dict[key];
 }
 
-class DateTimeEpochConverter implements JsonConverter<DateTime, int> {
+class DateTimeEpochConverter implements JsonConverter<DateTime?, int?> {
   const DateTimeEpochConverter();
 
   @override
-  DateTime fromJson(int json) {
-    return DateTime.fromMillisecondsSinceEpoch(json);
+  DateTime? fromJson(int? json) {
+    return json == null ? null : DateTime.fromMillisecondsSinceEpoch(json);
   }
 
   @override
-  int toJson(DateTime object) {
-    return object.millisecondsSinceEpoch;
+  int? toJson(DateTime? object) {
+    return object == null ? null : object.millisecondsSinceEpoch;
   }
 }
