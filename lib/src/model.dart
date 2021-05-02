@@ -1,7 +1,15 @@
+/*
+API response model.
+run 'dart run build_runner build' to generate json class.
+ */
 import 'dart:convert';
+
+import 'package:json_annotation/json_annotation.dart';
 
 import 'util/extension.dart';
 import 'util/util.dart';
+
+part 'model.g.dart';
 
 enum TaskStatus {
   waiting,
@@ -55,122 +63,173 @@ class APIResponse<T> {
   }
 }
 
+@JsonSerializable()
 class APIInfoQuery {
   String? key;
   String? path;
   int? minVersion;
   int? maxVersion;
 
-  APIInfoQuery.fromJson(Map<String, dynamic>? json) {
-    key = mapGet(json, 'key');
-    path = mapGet(json, 'path');
-    minVersion = mapGet(json, 'minVersion');
-    maxVersion = mapGet(json, 'maxVersion');
-  }
+  APIInfoQuery(this.key, this.path, this.minVersion, this.maxVersion);
+
+  factory APIInfoQuery.fromJson(Map<String, dynamic> json) => _$APIInfoQueryFromJson(json);
+
+  Map<String, dynamic> toJson() => _$APIInfoQueryToJson(this);
 }
 
+@JsonSerializable()
 class DownloadStationInfoGetInfo {
   int? version;
+  @JsonKey(name: 'version_string')
   String? versionString;
+  @JsonKey(name: 'is_manager')
   bool? isManager;
 
-  DownloadStationInfoGetInfo.fromJson(Map<String, dynamic> json) {
-    version = mapGet(json, 'version');
-    versionString = mapGet(json, 'version_string');
-    isManager = mapGet(json, 'is_manager');
-  }
+  DownloadStationInfoGetInfo(this.version, this.versionString, this.isManager);
+
+  factory DownloadStationInfoGetInfo.fromJson(Map<String, dynamic> json) => _$DownloadStationInfoGetInfoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DownloadStationInfoGetInfoToJson(this);
 }
 
+@JsonSerializable()
 class DownloadStationInfoGetConfig {
+  @JsonKey(name: 'bt_max_download')
   int? btMaxDownload;
+  @JsonKey(name: 'bt_max_upload')
   int? btMaxUpload;
+  @JsonKey(name: 'emule_max_download')
   int? emuleMaxDownload;
+  @JsonKey(name: 'emule_max_upload')
   int? emuleMaxUpload;
+  @JsonKey(name: 'nzb_max_download')
   int? nzbMaxDownload;
+  @JsonKey(name: 'http_max_download')
   int? httpMaxDownload;
+  @JsonKey(name: 'ftp_max_download')
   int? ftpMaxDownload;
+  @JsonKey(name: 'emule_enabled')
   bool? emuleEnabled;
+  @JsonKey(name: 'unzip_service_enabled')
   bool? unzipServiceEnabled;
+  @JsonKey(name: 'default_destination')
   String? defaultDestination;
+  @JsonKey(name: 'emule_default_destination')
   String? emuleDefaultDestination;
 
-  DownloadStationInfoGetConfig.fromJson(Map<String, dynamic> json) {
-    btMaxDownload = mapGet(json, 'bt_max_download');
-    btMaxUpload = mapGet(json, 'bt_max_upload');
-    emuleMaxDownload = mapGet(json, 'emule_max_download');
-    emuleMaxUpload = mapGet(json, 'emule_max_upload');
-    nzbMaxDownload = mapGet(json, 'nzb_max_download');
-    httpMaxDownload = mapGet(json, 'http_max_download');
-    ftpMaxDownload = mapGet(json, 'ftp_max_download');
-    emuleEnabled = mapGet(json, 'emule_enabled');
-    unzipServiceEnabled = mapGet(json, 'unzip_service_enabled');
-    defaultDestination = mapGet(json, 'default_destination');
-    emuleDefaultDestination = mapGet(json, 'emule_default_destination');
-  }
+  DownloadStationInfoGetConfig(
+      this.btMaxDownload,
+      this.btMaxUpload,
+      this.emuleMaxDownload,
+      this.emuleMaxUpload,
+      this.nzbMaxDownload,
+      this.httpMaxDownload,
+      this.ftpMaxDownload,
+      this.emuleEnabled,
+      this.unzipServiceEnabled,
+      this.defaultDestination,
+      this.emuleDefaultDestination);
+
+  factory DownloadStationInfoGetConfig.fromJson(Map<String, dynamic> json) =>
+      _$DownloadStationInfoGetConfigFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DownloadStationInfoGetConfigToJson(this);
 }
 
+@JsonSerializable()
 class DownloadStationScheduleGetConfig {
   bool? enabled;
+  @JsonKey(name: 'emule_enabled')
   bool? emuleEnabled;
 
-  DownloadStationScheduleGetConfig.fromJson(Map<String, dynamic> json) {
-    enabled = mapGet(json, 'enabled');
-    emuleEnabled = mapGet(json, 'emule_enabled');
-  }
+  DownloadStationScheduleGetConfig(this.enabled, this.emuleEnabled);
+
+  factory DownloadStationScheduleGetConfig.fromJson(Map<String, dynamic> json) =>
+      _$DownloadStationScheduleGetConfigFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DownloadStationScheduleGetConfigToJson(this);
 }
 
+@JsonSerializable()
 class DownloadStationStatisticGetInfo {
+  @JsonKey(name: 'speed_download')
   int? speedDownload;
+  @JsonKey(name: 'speed_upload')
   int? speedUpload;
+  @JsonKey(name: 'emule_speed_download')
   int? emuleSpeedDownload;
+  @JsonKey(name: 'emule_speed_upload')
   int? emuleSpeedUpload;
 
-  DownloadStationStatisticGetInfo.fromJson(Map<String, dynamic> json) {
-    speedDownload = mapGet(json, 'speed_download');
-    speedUpload = mapGet(json, 'speed_upload');
-    emuleSpeedDownload = mapGet(json, 'emule_speed_download');
-    emuleSpeedUpload = mapGet(json, 'emule_speed_upload');
-  }
+  DownloadStationStatisticGetInfo(this.speedDownload, this.speedUpload, this.emuleSpeedDownload, this.emuleSpeedUpload);
+
+  factory DownloadStationStatisticGetInfo.fromJson(Map<String, dynamic> json) =>
+      _$DownloadStationStatisticGetInfoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DownloadStationStatisticGetInfoToJson(this);
 }
 
+@JsonSerializable()
 class _DownloadStationTaskActionResponse {
   String? id;
   int? error;
 
-  _DownloadStationTaskActionResponse.fromJson(Map<String, dynamic> json) {
-    id = mapGet(json, 'id');
-    error = mapGet(json, 'error');
-  }
+  _DownloadStationTaskActionResponse(this.id, this.error);
+
+  factory _DownloadStationTaskActionResponse.fromJson(Map<String, dynamic> json) =>
+      _$_DownloadStationTaskActionResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$_DownloadStationTaskActionResponseToJson(this);
 }
 
 class _DownloadStationMultiTaskActionResponse {
   List<_DownloadStationTaskActionResponse> responses = [];
 
-  _DownloadStationMultiTaskActionResponse.fromJson(List<dynamic>? json) {
+  _DownloadStationMultiTaskActionResponse(this.responses);
+
+  factory _DownloadStationMultiTaskActionResponse.fromJson(List<dynamic>? json) {
     if (json != null) {
-      responses = json.map((el) {
+      return _DownloadStationMultiTaskActionResponse(json.map((el) {
         return _DownloadStationTaskActionResponse.fromJson(el);
-      }).toList();
+      }).toList());
     }
+    return _DownloadStationMultiTaskActionResponse([]);
   }
 }
 
 class DownloadStationTaskDelete extends _DownloadStationMultiTaskActionResponse {
-  DownloadStationTaskDelete.fromJson(List<dynamic> json) : super.fromJson(json);
+  DownloadStationTaskDelete(_DownloadStationMultiTaskActionResponse superObj) : super(superObj.responses);
+
+  factory DownloadStationTaskDelete.fromJson(List<dynamic> json) {
+    return DownloadStationTaskDelete(_DownloadStationMultiTaskActionResponse.fromJson(json));
+  }
 }
 
 class DownloadStationTaskPause extends _DownloadStationMultiTaskActionResponse {
-  DownloadStationTaskPause.fromJson(List<dynamic> json) : super.fromJson(json);
+  DownloadStationTaskPause(_DownloadStationMultiTaskActionResponse superObj) : super(superObj.responses);
+
+  factory DownloadStationTaskPause.fromJson(List<dynamic> json) {
+    return DownloadStationTaskPause(_DownloadStationMultiTaskActionResponse.fromJson(json));
+  }
 }
 
 class DownloadStationTaskResume extends _DownloadStationMultiTaskActionResponse {
-  DownloadStationTaskResume.fromJson(List<dynamic> json) : super.fromJson(json);
+  DownloadStationTaskResume(_DownloadStationMultiTaskActionResponse superObj) : super(superObj.responses);
+
+  factory DownloadStationTaskResume.fromJson(List<dynamic> json) {
+    return DownloadStationTaskResume(_DownloadStationMultiTaskActionResponse.fromJson(json));
+  }
 }
 
 class DownloadStationTaskEdit extends _DownloadStationTaskActionResponse {
-  DownloadStationTaskEdit.fromJson(Map<String, dynamic> json) : super.fromJson(json);
+  DownloadStationTaskEdit(_DownloadStationTaskActionResponse superObj) : super(superObj.id, superObj.error);
+
+  factory DownloadStationTaskEdit.fromJson(Map<String, dynamic> json) {
+    return DownloadStationTaskEdit(_DownloadStationTaskActionResponse.fromJson(json));
+  }
 }
 
+@JsonSerializable()
 class ListTaskInfo {
   int total = 0;
   int offset = 0;
@@ -178,16 +237,12 @@ class ListTaskInfo {
 
   ListTaskInfo(this.total, this.offset, this.tasks);
 
-  ListTaskInfo.fromJson(Map<String, dynamic> json) {
-    total = mapGet(json, 'total');
-    offset = mapGet(json, 'offset');
+  factory ListTaskInfo.fromJson(Map<String, dynamic> json) => _$ListTaskInfoFromJson(json);
 
-    tasks = mapGet(json, 'tasks', mapper: (List<dynamic> tasksJson) {
-      return tasksJson.map((map) => Task.fromJson(map)).toList();
-    });
-  }
+  Map<String, dynamic> toJson() => _$ListTaskInfoToJson(this);
 }
 
+@JsonSerializable()
 class Task {
   String? id;
   String? type;
@@ -195,19 +250,16 @@ class Task {
   String? title;
   int? size;
   String? _status;
+  @JsonKey(name: 'status_extra')
   StatusExtra? statusExtra;
   Additional? additional;
 
-  Task.fromJson(Map<String, dynamic> json) {
-    id = mapGet(json, 'id');
-    type = mapGet(json, 'type');
-    username = mapGet(json, 'username');
-    title = mapGet(json, 'title');
-    size = mapGet(json, 'size');
-    _status = mapGet(json, 'status');
-    statusExtra = mapGet(json, 'status_extra', mapper: (val) => StatusExtra.fromJson(val));
-    additional = mapGet(json, 'additional', mapper: (val) => Additional.fromJson(val));
-  }
+  Task(this.id, this.type, this.username, this.title, this.size, TaskStatus? status, this.statusExtra, this.additional)
+      : _status = status?.name;
+
+  factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TaskToJson(this);
 
   set status(TaskStatus? status) {
     _status = status?.name;
@@ -249,6 +301,7 @@ class Task {
   }
 }
 
+@JsonSerializable()
 class Additional {
   TaskDetail? detail;
   TaskTransfer? transfer;
@@ -256,208 +309,206 @@ class Additional {
   List<TaskTracker>? tracker;
   List<TaskPeer>? peer;
 
-  Additional.fromJson(Map<String, dynamic>? json) {
-    if (json == null) return;
-    mapGet(json, 'detail', ifPresent: (Map<String, dynamic> _json) {
-      detail = TaskDetail.fromJson(_json);
-    });
-    mapGet(json, 'transfer', ifPresent: (Map<String, dynamic> _json) {
-      transfer = TaskTransfer.fromJson(_json);
-    });
-    file = mapGet(json, 'file', mapper: (value) {
-      return (value as List).map((e) => TaskFile.fromJson(e)).toList();
-    });
-    tracker = mapGet(json, 'tracker', mapper: (value) {
-      return (value as List).map((e) => TaskTracker.fromJson(e)).toList();
-    });
-    peer = mapGet(json, 'peer', mapper: (value) {
-      return (value as List).map((e) => TaskPeer.fromJson(e)).toList();
-    });
-  }
+  Additional(this.detail, this.transfer, this.file, this.tracker, this.peer);
+
+  factory Additional.fromJson(Map<String, dynamic> json) => _$AdditionalFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AdditionalToJson(this);
 }
 
+@JsonSerializable()
 class StatusExtra {
+  @JsonKey(name: 'error_detail')
   String? errorDetail;
+  @JsonKey(name: 'unzip_progress')
   int? unzipProgress;
 
-  StatusExtra.fromJson(Map<String, dynamic>? json) {
-    if (json == null) return;
-    errorDetail = mapGet(json, 'error_detail');
-    unzipProgress = mapGet(json, 'unzip_progress');
-  }
+  StatusExtra(this.errorDetail, this.unzipProgress);
+
+  factory StatusExtra.fromJson(Map<String, dynamic> json) => _$StatusExtraFromJson(json);
+
+  Map<String, dynamic> toJson() => _$StatusExtraToJson(this);
 }
 
+@JsonSerializable()
+@DateTimeEpochConverter()
 class TaskDetail {
   String? destination;
   String? uri;
+  @JsonKey(name: 'create_time')
   DateTime? createTime;
+  @JsonKey(name: 'started_time')
   DateTime? startedTime;
+  @JsonKey(name: 'completed_time')
   DateTime? completedTime;
   String? priority;
+  @JsonKey(name: 'total_peers')
   int? totalPeers;
+  @JsonKey(name: 'connected_seeders')
   int? connectedSeeders;
+  @JsonKey(name: 'connected_leechers')
   int? connectedLeechers;
+  @JsonKey(name: 'connected_peers')
   int? connectedPeers;
+  @JsonKey(name: 'seedelapsed')
   int? seedElapsed;
+  @JsonKey(name: 'unzip_password')
   String? unzipPassword;
+  @JsonKey(name: 'waiting_seconds')
   int? waitingSeconds;
+  @JsonKey(name: 'total_pieces')
   int? totalPieces;
 
-  TaskDetail.fromJson(Map<String, dynamic> json) {
-    destination = mapGet(json, 'destination');
-    uri = mapGet(json, 'uri');
+  TaskDetail(
+      this.destination,
+      this.uri,
+      this.createTime,
+      this.startedTime,
+      this.completedTime,
+      this.priority,
+      this.totalPeers,
+      this.connectedSeeders,
+      this.connectedLeechers,
+      this.connectedPeers,
+      this.seedElapsed,
+      this.unzipPassword,
+      this.waitingSeconds,
+      this.totalPieces);
 
-    // parse long timestamp
-    createTime = mapGet(json, 'create_time', mapper: (ts) {
-      return DateTime.fromMillisecondsSinceEpoch(ts * 1000);
-    });
-    startedTime = mapGet(json, 'started_time', mapper: (ts) {
-      return DateTime.fromMillisecondsSinceEpoch(ts * 1000);
-    });
-    completedTime = mapGet(json, 'completed_time', mapper: (ts) {
-      return DateTime.fromMillisecondsSinceEpoch(ts * 1000);
-    });
+  factory TaskDetail.fromJson(Map<String, dynamic> json) => _$TaskDetailFromJson(json);
 
-    priority = mapGet(json, 'priority');
-    totalPeers = mapGet(json, 'total_peers');
-    connectedSeeders = mapGet(json, 'connected_seeders');
-    connectedLeechers = mapGet(json, 'connected_leechers');
-    connectedPeers = mapGet(json, 'connected_peers');
-    seedElapsed = mapGet(json, 'seedelapsed');
-    unzipPassword = mapGet(json, 'unzip_password');
-    waitingSeconds = mapGet(json, 'waiting_seconds');
-    totalPieces = mapGet(json, 'total_pieces');
-  }
+  Map<String, dynamic> toJson() => _$TaskDetailToJson(this);
 }
 
+@JsonSerializable()
 class TaskTransfer {
+  @JsonKey(name: 'downloaded_pieces')
   int? downloadedPieces;
+  @JsonKey(name: 'size_downloaded')
   int? sizeDownloaded;
+  @JsonKey(name: 'size_uploaded')
   int? sizeUploaded;
+  @JsonKey(name: 'speed_download')
   int? speedDownload;
+  @JsonKey(name: 'speed_upload')
   int? speedUpload;
 
-  TaskTransfer.fromJson(Map<String, dynamic> json) {
-    downloadedPieces = mapGet(json, 'downloaded_pieces');
-    sizeDownloaded = mapGet(json, 'size_downloaded');
-    sizeUploaded = mapGet(json, 'size_uploaded');
-    speedDownload = mapGet(json, 'speed_download');
-    speedUpload = mapGet(json, 'speed_upload');
-  }
+  TaskTransfer(this.downloadedPieces, this.sizeDownloaded, this.sizeUploaded, this.speedDownload, this.speedUpload);
+
+  factory TaskTransfer.fromJson(Map<String, dynamic> json) => _$TaskTransferFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TaskTransferToJson(this);
 }
 
+@JsonSerializable()
 class TaskFile {
   String? filename;
   int? index;
   int? size;
+  @JsonKey(name: 'size_downloaded')
   int? sizeDownloaded;
   String? priority;
   bool? wanted;
 
-  TaskFile.fromJson(Map<String, dynamic> json) {
-    filename = mapGet(json, 'filename');
-    index = mapGet(json, 'index');
-    size = mapGet(json, 'size');
-    sizeDownloaded = mapGet(json, 'size_downloaded');
-    priority = mapGet(json, 'priority');
-    wanted = mapGet(json, 'wanted');
-  }
+  TaskFile(this.filename, this.index, this.size, this.sizeDownloaded, this.priority, this.wanted);
+
+  factory TaskFile.fromJson(Map<String, dynamic> json) => _$TaskFileFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TaskFileToJson(this);
 }
 
+@JsonSerializable()
 class TaskTracker {
   String? url;
   String? status;
+  @JsonKey(name: 'update_timer')
   int? updateTimer;
   int? seeds;
   int? peers;
 
-  TaskTracker.fromJson(Map<String, dynamic> json) {
-    url = mapGet(json, 'url');
-    status = mapGet(json, 'status');
-    updateTimer = mapGet(json, 'update_timer');
-    seeds = mapGet(json, 'seeds');
-    peers = mapGet(json, 'peers');
-  }
+  TaskTracker(this.url, this.status, this.updateTimer, this.seeds, this.peers);
+
+  factory TaskTracker.fromJson(Map<String, dynamic> json) => _$TaskTrackerFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TaskTrackerToJson(this);
 }
 
+@JsonSerializable()
 class TaskPeer {
   String? address;
   String? agent;
   num? progress;
+  @JsonKey(name: 'speed_download')
   int? speedDownload;
+  @JsonKey(name: 'speed_upload')
   int? speedUpload;
 
-  TaskPeer.fromJson(Map<String, dynamic> json) {
-    address = mapGet(json, 'address');
-    agent = mapGet(json, 'agent');
-    progress = mapGet(json, 'progress');
-    speedDownload = mapGet(json, 'speed_download');
-    speedUpload = mapGet(json, 'speed_upload');
-  }
+  TaskPeer(this.address, this.agent, this.progress, this.speedDownload, this.speedUpload);
+
+  factory TaskPeer.fromJson(Map<String, dynamic> json) => _$TaskPeerFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TaskPeerToJson(this);
 }
 
+@JsonSerializable()
 class DownloadStationRSSSiteList {
   int total = 0;
   int offset = 0;
   List<Site> sites = [];
 
-  DownloadStationRSSSiteList.fromJson(Map<String, dynamic> json) {
-    total = mapGet(json, 'total');
-    offset = mapGet(json, 'offset');
-    sites = mapGet(json, 'sites', mapper: (value) {
-      return (value as List).map((e) => Site.fromJson(e)).toList();
-    });
-  }
+  DownloadStationRSSSiteList(this.total, this.offset, this.sites);
+
+  factory DownloadStationRSSSiteList.fromJson(Map<String, dynamic> json) => _$DownloadStationRSSSiteListFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DownloadStationRSSSiteListToJson(this);
 }
 
+@JsonSerializable()
+@DateTimeEpochConverter()
 class Site {
   int? id;
-  bool? is_updating;
+  @JsonKey(name: 'is_updating')
+  bool? isUpdating;
   String? title;
   String? url;
+  @JsonKey(name: 'last_update')
   DateTime? lastUpdate;
   String? username;
 
-  Site.fromJson(Map<String, dynamic> json) {
-    id = mapGet(json, 'id');
-    is_updating = mapGet(json, 'is_updating');
-    title = mapGet(json, 'title');
-    url = mapGet(json, 'url');
-    username = mapGet(json, 'username');
-    lastUpdate = mapGet(json, 'last_update', mapper: (ts) {
-      return DateTime.fromMillisecondsSinceEpoch(ts * 1000);
-    });
-  }
+  Site(this.id, this.isUpdating, this.title, this.url, this.lastUpdate, this.username);
+
+  factory Site.fromJson(Map<String, dynamic> json) => _$SiteFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SiteToJson(this);
 }
 
+@JsonSerializable()
 class DownloadStationRSSFeedList {
   int total = 0;
   int offset = 0;
   List<Feed> feeds = [];
 
-  DownloadStationRSSFeedList.fromJson(Map<String, dynamic> json) {
-    total = mapGet(json, 'total');
-    offset = mapGet(json, 'offset');
-    feeds = mapGet(json, 'feeds', mapper: (value) {
-      return (value as List).map((e) => Feed.fromJson(e)).toList();
-    });
-  }
+  DownloadStationRSSFeedList(this.total, this.offset, this.feeds);
+
+  factory DownloadStationRSSFeedList.fromJson(Map<String, dynamic> json) => _$DownloadStationRSSFeedListFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DownloadStationRSSFeedListToJson(this);
 }
 
+@JsonSerializable()
+@DateTimeEpochConverter()
 class Feed {
   String? title;
   String? size;
   DateTime? time;
+  @JsonKey(name: 'download_uri')
   String? downloadUri;
+  @JsonKey(name: 'external_link')
   String? externalLink;
 
-  Feed.fromJson(Map<String, dynamic> json) {
-    title = mapGet(json, 'title');
-    size = mapGet(json, 'size');
-    time = mapGet(json, 'time', mapper: (ts) {
-      return DateTime.fromMillisecondsSinceEpoch(ts * 1000);
-    });
-    downloadUri = mapGet(json, 'download_uri');
-    externalLink = mapGet(json, 'external_link');
-  }
+  Feed(this.title, this.size, this.time, this.downloadUri, this.externalLink);
+
+  factory Feed.fromJson(Map<String, dynamic> json) => _$FeedFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FeedToJson(this);
 }
