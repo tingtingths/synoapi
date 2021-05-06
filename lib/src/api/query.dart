@@ -37,7 +37,6 @@ class Info {
       'query': query,
       'method': 'query'
     };
-    param.removeWhere((key, value) => value == null);
 
     final uri = _cntx.buildUri(_parentApi.endpoint, param);
     return _cntx.c.getUri(uri);

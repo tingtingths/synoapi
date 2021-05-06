@@ -1,4 +1,4 @@
-const String UNKNOWN = "Unknown";
+const String UNKNOWN = 'Unknown';
 
 class Syno {
   static final name = 'SYNO';
@@ -10,7 +10,7 @@ class Syno {
 
 class _Api {
   final name = 'API';
-  String _base;
+  final String _base;
 
   _Api(this._base);
 
@@ -21,7 +21,7 @@ class _Api {
 
 class _Ds {
   final name = 'DownloadStation';
-  String _base;
+  final String _base;
 
   _Ds(this._base);
 
@@ -40,7 +40,7 @@ class _Ds {
 
 class _Rss {
   final name = 'RSS';
-  String _base;
+  final String _base;
 
   _Rss(this._base);
 

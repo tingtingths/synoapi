@@ -59,7 +59,7 @@ void main() {
     });
 
     test('Test List RSS Feeds', () async {
-      final resp = await dsApi.rss.feed.list("0");
+      final resp = await dsApi.rss.feed.list('0');
       expect(resp, isNotNull);
     });
   });

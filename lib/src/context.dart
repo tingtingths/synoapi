@@ -40,7 +40,7 @@ class APIContext {
   late final String _authority;
   late final String _endpoint;
   late final Dio _client;
-  Map<String, String> _appSid;
+  final Map<String, String> _appSid;
   Map<String, APIInfoQuery> _apiInfo = {};
 
   APIContext(String host,
