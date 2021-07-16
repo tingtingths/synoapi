@@ -4,7 +4,7 @@ Fully modeled Synology API client in dart.
 
 ## Usage
 
-Get and create tasks on Download Station.
+E.g. Get and create tasks on Download Station.
 
 ```dart
 import 'package:synoapi/synoapi.dart';
@@ -33,3 +33,7 @@ main() async {
 ## Limitations
 
 - Only Download Station API provided currently.
+
+## References
+
+ - [Synology_Download Station Official API_20140326](https://global.download.synology.com/download/Document/Software/DeveloperGuide/Package/DownloadStation/All/enu/Synology_Download_Station_Web_API.pdf)
