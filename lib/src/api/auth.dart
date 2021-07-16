@@ -10,7 +10,7 @@ class AuthAPIRaw {
   AuthAPIRaw(this._cntx);
 
   Future<Response<String>> login(String account, String passwd, String session,
-      {int version = 2, String format = 'sid', String? otpCode}) async {
+      {int version = 3, String format = 'sid', String? otpCode}) async {
     final param = {
       'account': account,
       'passwd': passwd,

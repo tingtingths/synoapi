@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:logging/logging.dart';
 import 'package:synoapi/synoapi.dart' as api;
 import 'package:test/test.dart';
@@ -17,7 +19,19 @@ void main() {
   var queryApi = api.QueryAPI(cntx);
   var dsApi = api.DownloadStationAPI(cntx);
   setUp(() async {
-    authOk = await cntx.authApp(api.Syno.DownloadStation.name, SYNO_USER, SYNO_USER_PASS);
+    authOk = await cntx.authApp(
+        api.Syno.DownloadStation.name,
+        SYNO_USER,
+        SYNO_USER_PASS,
+        otpCallback: () async {
+          String? otpCode;
+          while (otpCode == null || otpCode.trim().isEmpty) {
+            print('OTP Code? >');
+            otpCode = stdin.readLineSync();
+          }
+          return otpCode;
+        }
+    );
   });
 
   test('Auth OK?', () {

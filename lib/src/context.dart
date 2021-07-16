@@ -84,7 +84,7 @@ class APIContext {
 
   Future<bool> authApp(String app, String account, String passwd,
       {String? otpCode, AsyncStringCallback? otpCallback}) async {
-    var resp = await AuthAPIRaw(this).login(account, passwd, app, otpCode: otpCode, format: 'sid');
+    var resp = await AuthAPIRaw(this).login(account, passwd, app, otpCode: otpCode, format: 'sid', version: 3);
     var respObj = jsonDecode(resp.data!);
     if (respObj['success']) {
       _appSid[app] = respObj['data']['sid'];
@@ -104,7 +104,7 @@ class APIContext {
       return true;
     } else {
       l.fine('authApp(); Authentication fail, code = ${respObj['error']['code']}');
-      if (otpCallback != null && respObj['error']['code'] == 402) {
+      if (otpCallback != null && respObj['error']['code'] == 403) {
         // otp code required
         return authApp(app, account, passwd, otpCode: await otpCallback());
       }
