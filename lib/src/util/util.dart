@@ -13,12 +13,34 @@ V? mapGet<K, V>(Map<K, dynamic>? dict, K key, {otherwise, Function? mapper, Func
   return dict[key];
 }
 
+enum TimestampUnit {
+  SECOND, MILLISECOND, MICROSECOND
+}
+
+extension TimestampUnitExt on TimestampUnit {
+  int toMilliseconds(int num) {
+    switch (this) {
+      case TimestampUnit.SECOND:
+        return num * 1000;
+      case TimestampUnit.MILLISECOND:
+        return num * 1;
+      case TimestampUnit.MICROSECOND:
+        return (num / 1000).round();
+      default:
+        return num;
+    }
+  }
+}
+
 class DateTimeEpochConverter implements JsonConverter<DateTime?, int?> {
-  const DateTimeEpochConverter();
+
+  final TimestampUnit unit;
+
+  const DateTimeEpochConverter({this.unit = TimestampUnit.SECOND});
 
   @override
   DateTime? fromJson(int? json) {
-    return json == null ? null : DateTime.fromMillisecondsSinceEpoch(json);
+    return json == null ? null : DateTime.fromMillisecondsSinceEpoch(unit.toMilliseconds(json));
   }
 
   @override
