@@ -40,7 +40,7 @@ class DateTimeEpochConverter implements JsonConverter<DateTime?, int?> {
 
   @override
   DateTime? fromJson(int? json) {
-    return json == null ? null : DateTime.fromMillisecondsSinceEpoch(unit.toMilliseconds(json));
+    return json == null || json == 0 ? null : DateTime.fromMillisecondsSinceEpoch(unit.toMilliseconds(json));
   }
 
   @override
